@@ -1,1 +1,19 @@
 
+.component-countdown svg circle{
+    stroke-dasharray: 113px;
+    stroke-dashoffset: 0;
+    stroke-linecap: round;
+    stroke-width: 2px;
+    stroke: currentColor;
+    fill: none;
+    animation: countdown linear forwards;
+}
+
+@keyframes countdown {
+    from {
+        stroke-dashoffset: 0;
+    }
+    to {
+        stroke-dashoffset: 113px;
+    }
+}

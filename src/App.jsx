@@ -3,35 +3,28 @@ import reactLogo from './assets/react.svg';
 import './App.css';
 import Counter from './Counter';
 import Dashboard from './components/Dashboard';
+import data from './assets/sample-data.js';
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <Dashboard>
-      <div className="App">
-        <div>
-          <a href="https://vitejs.dev" target="_blank">
-            <img src="/vite.svg" className="logo" alt="Vite logo" />
-          </a>
-          <a href="https://reactjs.org" target="_blank">
-            <img src={reactLogo} className="logo react" alt="React logo" />
-          </a>
-        </div>
-        <Counter />
-        <h1>Vite + React</h1>
-        <div className="card">
-          <button onClick={() => setCount((count) => count + 1)}>
-            count is {count}
-          </button>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test HMR
-          </p>
-        </div>
-        <p className="read-the-docs">
-          Click on the Vite and React logos to learn more
-        </p>
-      </div>
+      <p>Ohm bonds | expiry 2022-11-03</p>
+      <p>
+        avaliable live market ?<span>price</span>
+        <span>buy</span>
+      </p>
+      <p>gnosis opsion</p>
+      <p>
+        avalaible secondary market market ?(secondary market is when you buy
+        from another user instead of the protocol)
+      </p>
+      <p>total quantity (Market dept)</p>
+      <p>my holdings</p>
+      <p>sell on the secondary market</p>
+      <p>redeem (number of days till can redeem)</p>
+      <p>staking rebase rate</p>
+
+      <p>price comparison from stating</p>
     </Dashboard>
   );
 }

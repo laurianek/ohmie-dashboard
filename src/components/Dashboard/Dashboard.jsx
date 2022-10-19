@@ -12,6 +12,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import UserProfile from './UserProfile.jsx';
+import Countdown from '../CountDown.jsx';
 
 const navigation = [
   { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
@@ -27,7 +28,7 @@ export default function Dashboard({ children }) {
 
   return (
     <>
-      <div>
+      <div className="">
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as="div"
@@ -185,10 +186,11 @@ export default function Dashboard({ children }) {
 
 function Main({ children }) {
   return (
-    <main className="flex-1 bg-slate-600">
+    <main className="flex-1">
       <div className="py-6">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="text-2xl font-semibold text-slate-100">Dashboard</h1>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-row text-slate-100 justify-between">
+          <h1 className="text-2xl font-semibold">Dashboard</h1>
+          <Countdown initialCount={30} restart={'97ewl9'} />
         </div>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 text-slate-200">
           {children}
