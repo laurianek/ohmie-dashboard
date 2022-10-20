@@ -1,6 +1,11 @@
 import React from 'react';
 import { format } from 'date-fns';
-import { classNames } from '../../util';
+import {
+  classNames,
+  calculate_bond_return,
+  calculate_percent_return_bond_vs_staking,
+  getIntervalFromNow,
+} from '../../util';
 import data from '../../assets/sample-data.js';
 
 import { PrimaryButton, SecondaryButton } from '../Buttons.jsx';
@@ -9,13 +14,20 @@ import Row, { HeaderRow } from './Row.jsx';
 import Cell from './Cell.jsx';
 import { FakeInput } from './FakeInput.jsx';
 import { useStore } from '../../store.jsx';
-import { calculate_bond_return } from '../../util';
 
 export default function BondDisplay() {
   const { userStack } = useStore();
   const currentBond = Object.values(data.bonds)[0];
   const market = currentBond.live_markets[0];
+  const dayDiff = getIntervalFromNow({
+    timestamp: currentBond.expiry_timestamp,
+  });
   const bondReturn = calculate_bond_return(userStack, market.price);
+  const comparisonPerc = calculate_percent_return_bond_vs_staking(
+    userStack,
+    market.price,
+    dayDiff.days
+  );
 
   return (
     <>
@@ -39,8 +51,18 @@ export default function BondDisplay() {
             <Cell label={'Price'}>
               {market.price} {market.currency}
             </Cell>
-            <Cell label={'Discount'}>{market.discount}</Cell>
-            <Cell label={'Comp. staking'}>{market.discount}</Cell>
+            <Cell
+              label={'Discount'}
+              className={parseFloat(market.discount) < 0 ? 'text-red-500' : ''}
+            >
+              {parseFloat(market.discount).toFixed(2)} %
+            </Cell>
+            <Cell
+              label={'Comp. staking'}
+              className={comparisonPerc < 0 ? 'text-red-500' : 'text-lime-300'}
+            >
+              {comparisonPerc.toFixed('2')} %
+            </Cell>
             <Cell
               label={'You would get'}
               className="sm:col-span-2 flex justify-end flex-wrap gap-1.5"
@@ -61,7 +83,7 @@ export default function BondDisplay() {
             <Cell className="col-span-5 col-start-3">
               <div className="bg-lisbon-400 shadow rounded-lg px-4 py-5 sm:p-6 mt-3 text-black">
                 <div className="grid grid-cols-3 gap-4">
-                  {getExtraStats(market, bondReturn).map(
+                  {getExtraStats(market, bondReturn, comparisonPerc).map(
                     ({ label, value, className = 'text-parisII-50' }, i) => (
                       <div key={`${label}-${i}`}>
                         <div className="mt-1 flex items-baseline justify-between md:block lg:flex">
@@ -108,9 +130,13 @@ function getExtraStats(market, userStack = 0, userPL = 0) {
     {
       label: 'Back for every 1 OHM you put in',
       value: `${userStack.toFixed(4)}`,
-      className: userStack < 1 ? 'text-red-700' : 'text-green-300',
+      className: userStack < 1 ? 'text-red-700' : 'text-lime-300',
     },
-    { label: 'Compared to staking', value: userPL },
+    {
+      label: 'Compared to staking',
+      value: `${userPL.toFixed(2)} %`,
+      className: userPL < 0 ? 'text-red-700' : 'text-lime-300',
+    },
   ];
 
   if (market.remaining_available) {

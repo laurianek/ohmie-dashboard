@@ -6,8 +6,8 @@ export default {
       display_name: 'Ohm Bonds',
       total_num_holders: 6,
       total_supply: 1625,
-      expiry_timestamp: Date.now() + 1000,
-      last_refresh: Date.now() - 1000,
+      expiry_timestamp: new Date(2022, 11, 20) / 1000,
+      last_refresh: Date.now() / 1000 - 60 * 3,
       best_price: 1.45,
       currency: 'OHM',
       live_markets: [
@@ -15,10 +15,10 @@ export default {
           exchange: {
             name: 'Bond protocol',
           },
-          price: 1.04,
+          price: 0.9748723,
           currency: 'OHM',
           buy_link: '#',
-          discount: '-3%',
+          discount: -3.34839, // in percentage
           total_amount_available: undefined,
           remaining_available: 4000,
           min_sale_price: undefined,
@@ -36,7 +36,7 @@ export default {
           total_amount_available: 10000,
           remaining_available: undefined,
           min_sale_price: 0.5,
-          end_timestamp: Date.now(),
+          end_timestamp: Date.now() / 1000,
           max_bondable_single_tx: undefined,
         },
       ],
@@ -81,8 +81,4 @@ export default {
       currency: 'OHM',
     },
   },
-};
-
-const getStakingRewardFromNowTo = (tillDate) => {
-  // product of 1.0000650 3 times a day till date
 };
