@@ -9,11 +9,13 @@ import Row, { HeaderRow } from './Row.jsx';
 import Cell from './Cell.jsx';
 import { FakeInput } from './FakeInput.jsx';
 import { useStore } from '../../store.jsx';
+import { calculate_bond_return } from '../../util';
 
 export default function BondDisplay() {
   const { userStack } = useStore();
   const currentBond = Object.values(data.bonds)[0];
   const market = currentBond.live_markets[0];
+  const bondReturn = calculate_bond_return(userStack, market.price);
 
   return (
     <>
@@ -43,7 +45,9 @@ export default function BondDisplay() {
               label={'You would get'}
               className="sm:col-span-2 flex justify-end flex-wrap gap-1.5"
             >
-              <FakeInput currency={market.currency}>{userStack || 0}</FakeInput>
+              <FakeInput currency={market.currency}>
+                {(bondReturn || 0).toFixed(4)}
+              </FakeInput>
               <SecondaryButton className="min-w-[85px] min-h-[36px] my-0.5">
                 See Details
               </SecondaryButton>
@@ -57,11 +61,16 @@ export default function BondDisplay() {
             <Cell className="col-span-5 col-start-3">
               <div className="bg-lisbon-400 shadow rounded-lg px-4 py-5 sm:p-6 mt-3 text-black">
                 <div className="grid grid-cols-3 gap-4">
-                  {getExtraStats(market, userStack).map(
-                    ({ label, value }, i) => (
+                  {getExtraStats(market, bondReturn).map(
+                    ({ label, value, className = 'text-parisII-50' }, i) => (
                       <div key={`${label}-${i}`}>
                         <div className="mt-1 flex items-baseline justify-between md:block lg:flex">
-                          <div className="flex items-baseline text-xl font-semibold text-parisII-200">
+                          <div
+                            className={classNames(
+                              className,
+                              'flex items-baseline text-xl font-semibold'
+                            )}
+                          >
                             {value}
                           </div>
                         </div>
@@ -96,14 +105,21 @@ function getExtraStats(market, userStack = 0, userPL = 0) {
   } = market;
   const base = [
     { label: 'Price', value: `${price} ${currency}` },
-    { label: 'You would get', value: userStack },
+    {
+      label: 'Back for every 1 OHM you put in',
+      value: `${userStack.toFixed(4)}`,
+      className: userStack < 1 ? 'text-red-700' : 'text-green-300',
+    },
     { label: 'Compared to staking', value: userPL },
   ];
 
   if (market.remaining_available) {
     return base.concat([
       { label: 'Remaining available', value: remaining_available },
-      { label: 'Max bondable', value: max_bondable_single_tx },
+      {
+        label: 'Max bondable in one transaction',
+        value: max_bondable_single_tx,
+      },
     ]);
   }
   return base.concat([

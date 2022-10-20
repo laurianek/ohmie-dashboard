@@ -9,15 +9,15 @@ export default function YourStake() {
   const [value, setValue] = useState(userStack);
   const timeoutRef = useRef({ index: undefined });
   const handleChange = (e) => setValue(e.target.value);
-  const rebases = calculate_rebase_for_x_days(value, 20);
+  const rebases = calculate_rebase_for_x_days(userStack, 20);
 
   useEffect(() => {
     if (userStack !== value) {
       clearTimeout(timeoutRef.current.index);
-      timeoutRef.current.index = setTimeout(
-        () => setUserStack(value),
-        shortTime
-      );
+      timeoutRef.current.index = setTimeout(() => {
+        const v = Number.isNaN(Number(value)) ? 0 : Number(value);
+        setUserStack(v);
+      }, shortTime);
     }
   }, [value, userStack, timeoutRef]);
 
