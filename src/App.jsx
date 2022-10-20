@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useStore } from './store.jsx';
+import React from 'react';
+import { useStore, ALL } from './store.jsx';
 import './App.css';
 import Dashboard from './components/Dashboard';
 import BondCard from './components/BondCard.jsx';
@@ -8,30 +8,11 @@ import data from './assets/sample-data.js';
 import { classNames } from './util';
 import { format } from 'date-fns';
 
-const PARTIAL = 'partial';
-const ALL = 'all';
-const ONE = 'one';
-
 function App() {
   const currentBond = Object.values(data.bonds)[0];
-  const [shownBonds, setShownBonds] = useState(PARTIAL);
-  const { currentBondId } = useStore();
 
-  const getBondCardClassName = (i, isActive) => {
-    if (shownBonds === ALL) return '';
-    if (shownBonds === ONE && isActive) return '';
-    if (shownBonds === PARTIAL && i < 2) return '';
-    if (shownBonds === PARTIAL && i < 3) return 'hidden lg:block';
-    return 'hidden';
-  };
-  const toggleShownBonds = () =>
-    currentBondId
-      ? shownBonds === ALL
-        ? setShownBonds(ONE)
-        : setShownBonds(ALL)
-      : shownBonds === ALL
-      ? setShownBonds(PARTIAL)
-      : setShownBonds(ALL);
+  const { currentBondId, shownBonds, getBondCardClassName, toggleShownBonds } =
+    useStore();
 
   return (
     <Dashboard>
@@ -50,8 +31,11 @@ function App() {
           />
         ))}
       </ul>
-      <div>
-        <button onClick={toggleShownBonds}>
+      <div className="flex justify-end pt-2 pb-3">
+        <button
+          onClick={toggleShownBonds}
+          className="inline-flex items-center rounded-md border px-3 py-2 text-sm font-medium leading-4 shadow-sm bg-transparent border-transparent text-paris-200 transition hover:border-paris-200 hover:text-paris-100 focus:outline-none focus:ring-2 focus:ring-paris-300 focus:border-paris-500"
+        >
           {shownBonds === ALL ? 'View less' : 'View all bonds'}
         </button>
       </div>

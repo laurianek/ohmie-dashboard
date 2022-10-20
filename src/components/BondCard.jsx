@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { format } from 'date-fns';
 import { classNames } from '../util/index.js';
 import { OmegaIcon } from './Icons.jsx';
