@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { format } from 'date-fns';
+import { Transition } from '@headlessui/react';
 import {
   classNames,
   calculate_bond_return,
@@ -22,6 +23,7 @@ export default function BondDisplay() {
   const currentBond = Object.values(data.bonds)[0];
   const market = currentBond.live_markets[0];
   const [nOptions, setnOptions] = useState(notificationOptions[0].text);
+  const [seeDetails, setSeeDetails] = useState({});
 
   const dayDiff = getIntervalFromNow({
     timestamp: currentBond.expiry_timestamp,
@@ -32,6 +34,8 @@ export default function BondDisplay() {
     market.price,
     dayDiff.days
   );
+  const toggleSeeDetails = (key) => () =>
+    setSeeDetails((state) => ({ ...state, [key]: !state[key] }));
 
   return (
     <>
@@ -74,7 +78,10 @@ export default function BondDisplay() {
               <FakeInput currency={market.currency}>
                 {(bondReturn || 0).toFixed(4)}
               </FakeInput>
-              <SecondaryButton className="min-w-[85px] min-h-[36px] my-0.5">
+              <SecondaryButton
+                className="min-w-[85px] min-h-[36px] my-0.5"
+                onClick={toggleSeeDetails(market.name)}
+              >
                 See Details
               </SecondaryButton>
               <PrimaryButton
@@ -84,41 +91,52 @@ export default function BondDisplay() {
                 BUY
               </PrimaryButton>
             </Cell>
-            <Cell className="col-span-5 col-start-3">
-              <div className="bg-lisbon-400 shadow rounded-lg px-4 py-5 sm:p-6 mt-3 text-black">
-                <div className="grid grid-cols-3 gap-4">
-                  {getExtraStats(market, bondReturn, comparisonPerc).map(
-                    ({ label, value, className = 'text-parisII-50' }, i) => (
-                      <div key={`${label}-${i}`}>
-                        <div className="mt-1 flex items-baseline justify-between md:block lg:flex">
-                          <div
-                            className={classNames(
-                              className,
-                              'flex items-baseline text-xl font-semibold'
-                            )}
-                          >
-                            {value}
-                          </div>
-                        </div>
-                        <div className="text-sm font-normal">{label}</div>
-                      </div>
-                    )
-                  )}
-                </div>
-                <div className="mt-6 flex w-full gap-4">
-                  <PrimaryButton size="md" className="min-w-[120px]">
-                    <div>
-                      Notify me <br />
-                      <small>(coming soon)</small>
-                    </div>
-                  </PrimaryButton>
 
-                  <NotifyDropDown
-                    value={nOptions}
-                    onChange={(v) => setnOptions(v)}
-                  />
+            <Cell className="col-span-5 col-start-3">
+              <Transition
+                show={!!seeDetails[market.name]}
+                enter="transition duration-100"
+                enterFrom="opacity-0 -translate-y-full"
+                enterTo="opacity-100 translate-y-0"
+                leave="transition duration-150"
+                leaveFrom="opacity-100 translate-y-0"
+                leaveTo="opacity-0 -translate-y-10"
+              >
+                <div className="bg-lisbon-400 shadow rounded-lg px-4 py-5 sm:p-6 mt-3 text-black">
+                  <div className="grid grid-cols-3 gap-4">
+                    {getExtraStats(market, bondReturn, comparisonPerc).map(
+                      ({ label, value, className = 'text-parisII-50' }, i) => (
+                        <div key={`${label}-${i}`}>
+                          <div className="mt-1 flex items-baseline justify-between md:block lg:flex">
+                            <div
+                              className={classNames(
+                                className,
+                                'flex items-baseline text-xl font-semibold'
+                              )}
+                            >
+                              {value}
+                            </div>
+                          </div>
+                          <div className="text-sm font-normal">{label}</div>
+                        </div>
+                      )
+                    )}
+                  </div>
+                  <div className="mt-6 flex w-full gap-4">
+                    <PrimaryButton size="md" className="min-w-[120px]">
+                      <div>
+                        Notify me <br />
+                        <small>(coming soon)</small>
+                      </div>
+                    </PrimaryButton>
+
+                    <NotifyDropDown
+                      value={nOptions}
+                      onChange={(v) => setnOptions(v)}
+                    />
+                  </div>
                 </div>
-              </div>
+              </Transition>
             </Cell>
           </Row>
 
