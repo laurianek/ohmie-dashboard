@@ -37,7 +37,7 @@ export default function BondCard({ bond, className }) {
             <OmegaIcon size={'35px'} aria-hidden="true" />
           </div>
           <p className="ml-16 pl-1 truncate text-sm font-medium text-lisbon-400">
-            {format(new Date(bond.expiry_timestamp), 'PPPp')}
+            {format(new Date(bond.expiry_timestamp * 1000), 'PPPp')}
           </p>
         </dt>
         <dd className="ml-16 pl-1 flex items-baseline pb-6 sm:pb-7">
