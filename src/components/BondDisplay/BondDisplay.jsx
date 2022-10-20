@@ -2,7 +2,12 @@ import React from 'react';
 import { format } from 'date-fns';
 import { classNames } from '../../util';
 import data from '../../assets/sample-data.js';
+
 import { PrimaryButton, SecondaryButton } from '../Buttons.jsx';
+import Header from './Header.jsx';
+import Row, { HeaderRow } from './Row.jsx';
+import Cell from './Cell.jsx';
+import { FakeInput } from './FakeInput.jsx';
 
 export default function BondDisplay() {
   const userStack = 9.45;
@@ -52,58 +57,5 @@ export default function BondDisplay() {
         </div>
       </div>
     </>
-  );
-}
-
-function Header({ title, subTitle }) {
-  return (
-    <div className="mt-12">
-      <div className="-ml-2 -mt-2 flex flex-wrap items-baseline">
-        <h3 className="ml-2 mt-2 text-xl font-medium leading-6">{title}</h3>
-        <p className="ml-2 mt-1 truncate text-sm text-paris-200">{subTitle}</p>
-      </div>
-    </div>
-  );
-}
-
-function HeaderRow({ children }) {
-  return (
-    <div className="py-4 hidden sm:grid sm:grid-cols-7 sm:gap-4 sm:items-center sm:py-1 text-sm bg-lisbon-700">
-      {children}
-    </div>
-  );
-}
-
-function Row({ children }) {
-  return (
-    <div className="py-4 sm:grid sm:grid-cols-7 sm:gap-4 sm:items-center sm:py-5 text-sm">
-      {children}
-    </div>
-  );
-}
-
-function Cell({ children, className = '', label = '' }) {
-  return (
-    <div className={classNames(className, 'mt-1.5 sm:mt-0')}>
-      {label && (
-        <span className="inline-flex sm:hidden items-center font-semibold text-lisbon-400 mr-2">
-          {label}
-        </span>
-      )}
-      {children}
-    </div>
-  );
-}
-
-function FakeInput({ children, currency }) {
-  return (
-    <div className="relative rounded-md shadow-sm text-sm flex-1">
-      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-        <span className="text-lisbon-400">{currency}</span>
-      </div>
-      <div className="block flex-1 rounded-md border-lisbon-700 border-2 bg-lisbon-600 pl-14 pr-2 py-2">
-        {children}
-      </div>
-    </div>
   );
 }
