@@ -28,12 +28,6 @@ export default function BondDisplay() {
   const dayDiff = getIntervalFromNow({
     timestamp: currentBond.expiry_timestamp,
   });
-  const bondReturn = calculate_bond_return(userStack, market.price);
-  const comparisonPerc = calculate_percent_return_bond_vs_staking(
-    userStack,
-    market.price,
-    dayDiff.days
-  );
   const toggleSeeDetails = (key) => () =>
     setSeeDetails((state) => ({ ...state, [key]: !state[key] }));
 
@@ -41,7 +35,7 @@ export default function BondDisplay() {
     <>
       <Header
         title={currentBond.display_name}
-        subTitle={format(new Date(currentBond.expiry_timestamp), 'PPPp')}
+        subTitle={format(new Date(currentBond.expiry_timestamp * 1000), 'PPPp')}
       />
 
       <div className="mt-5 border-y border-lisbon-900">
@@ -52,93 +46,117 @@ export default function BondDisplay() {
             <Cell>Compare to staking</Cell>
             <Cell>You would get</Cell>
           </HeaderRow>
-          <Row>
-            <div className="font-medium sm:col-span-2 text-paris-500 text-xl sm:text-sm">
-              {market.exchange.name}
-            </div>
-            <Cell label={'Price'}>
-              {market.price} {market.currency}
-            </Cell>
-            <Cell
-              label={'Discount'}
-              className={parseFloat(market.discount) < 0 ? 'text-red-500' : ''}
-            >
-              {parseFloat(market.discount).toFixed(2)} %
-            </Cell>
-            <Cell
-              label={'Comp. staking'}
-              className={comparisonPerc < 0 ? 'text-red-500' : 'text-lime-300'}
-            >
-              {comparisonPerc.toFixed(2)} %
-            </Cell>
-            <Cell
-              label={'You would get'}
-              className="sm:col-span-2 flex justify-end flex-wrap gap-1.5"
-            >
-              <FakeInput currency={market.currency}>
-                {(bondReturn || 0).toFixed(4)}
-              </FakeInput>
-              <SecondaryButton
-                className="min-w-[85px] min-h-[36px] my-0.5"
-                onClick={toggleSeeDetails(market.name)}
+          {currentBond.live_markets.map((market, index) => {
+            const bondReturn = calculate_bond_return(userStack, market.price);
+            const comparisonPercent = calculate_percent_return_bond_vs_staking(
+              userStack,
+              market.price,
+              dayDiff.days
+            );
+            return (
+              <Row
+                key={`row-${index}`}
+                className={!seeDetails[index] ? 'sm:gap-y-0' : 'sm:gap-y-4'}
               >
-                See Details
-              </SecondaryButton>
-              <PrimaryButton
-                link={market.buy_link}
-                className="min-w-[85px] min-h-[36px] my-0.5"
-              >
-                BUY
-              </PrimaryButton>
-            </Cell>
-
-            <Cell className="col-span-5 col-start-3">
-              <Transition
-                show={!!seeDetails[market.name]}
-                enter="transition duration-100"
-                enterFrom="opacity-0 -translate-y-full"
-                enterTo="opacity-100 translate-y-0"
-                leave="transition duration-150"
-                leaveFrom="opacity-100 translate-y-0"
-                leaveTo="opacity-0 -translate-y-10"
-              >
-                <div className="bg-lisbon-400 shadow rounded-lg px-4 py-5 sm:p-6 mt-3 text-black">
-                  <div className="grid grid-cols-3 gap-4">
-                    {getExtraStats(market, bondReturn, comparisonPerc).map(
-                      ({ label, value, className = 'text-parisII-50' }, i) => (
-                        <div key={`${label}-${i}`}>
-                          <div className="mt-1 flex items-baseline justify-between md:block lg:flex">
-                            <div
-                              className={classNames(
-                                className,
-                                'flex items-baseline text-xl font-semibold'
-                              )}
-                            >
-                              {value}
-                            </div>
-                          </div>
-                          <div className="text-sm font-normal">{label}</div>
-                        </div>
-                      )
-                    )}
-                  </div>
-                  <div className="mt-6 flex w-full gap-4">
-                    <PrimaryButton size="md" className="min-w-[120px]">
-                      <div>
-                        Notify me <br />
-                        <small>(coming soon)</small>
-                      </div>
-                    </PrimaryButton>
-
-                    <NotifyDropDown
-                      value={nOptions}
-                      onChange={(v) => setnOptions(v)}
-                    />
-                  </div>
+                <div className="font-medium sm:col-span-2 text-paris-500 text-xl sm:text-sm">
+                  {market.exchange.name}
                 </div>
-              </Transition>
-            </Cell>
-          </Row>
+                <Cell label={'Price'}>
+                  {market.price} {market.currency}
+                </Cell>
+                <Cell
+                  label={'Discount'}
+                  className={
+                    parseFloat(market.discount) < 0 ? 'text-red-500' : ''
+                  }
+                >
+                  {parseFloat(market.discount).toFixed(2)} %
+                </Cell>
+                <Cell
+                  label={'Comp. staking'}
+                  className={
+                    comparisonPercent < 0 ? 'text-red-500' : 'text-lime-300'
+                  }
+                >
+                  {comparisonPercent.toFixed(2)} %
+                </Cell>
+                <Cell
+                  label={'You would get'}
+                  className="sm:col-span-2 flex justify-end flex-wrap gap-1.5"
+                >
+                  <FakeInput currency={market.currency}>
+                    {(bondReturn || 0).toFixed(4)}
+                  </FakeInput>
+                  <SecondaryButton
+                    className="min-w-[85px] min-h-[36px] my-0.5"
+                    onClick={toggleSeeDetails(index)}
+                  >
+                    {!seeDetails[index] ? 'See details' : 'hide details'}
+                  </SecondaryButton>
+                  <PrimaryButton
+                    link={market.buy_link}
+                    className="min-w-[85px] min-h-[36px] my-0.5"
+                  >
+                    BUY
+                  </PrimaryButton>
+                </Cell>
+
+                <Cell className="col-span-5 col-start-3">
+                  <Transition
+                    show={!!seeDetails[index]}
+                    enter="transition duration-100"
+                    enterFrom="opacity-0 -translate-y-full"
+                    enterTo="opacity-100 translate-y-0"
+                    leave="transition duration-150"
+                    leaveFrom="opacity-100 translate-y-0"
+                    leaveTo="opacity-0 -translate-y-10"
+                  >
+                    <div className="bg-lisbon-400 shadow rounded-lg px-4 py-5 sm:p-6 mt-3 text-black">
+                      <div className="grid grid-cols-3 gap-4">
+                        {getExtraStats(
+                          market,
+                          bondReturn,
+                          comparisonPercent
+                        ).map(
+                          (
+                            { label, value, className = 'text-parisII-50' },
+                            i
+                          ) => (
+                            <div key={`${label}-${i}`}>
+                              <div className="mt-1 flex items-baseline justify-between md:block lg:flex">
+                                <div
+                                  className={classNames(
+                                    className,
+                                    'flex items-baseline text-xl font-semibold'
+                                  )}
+                                >
+                                  {value}
+                                </div>
+                              </div>
+                              <div className="text-sm font-normal">{label}</div>
+                            </div>
+                          )
+                        )}
+                      </div>
+                      <div className="mt-6 flex w-full gap-4">
+                        <PrimaryButton size="md" className="min-w-[120px]">
+                          <div>
+                            Notify me <br />
+                            <small>(coming soon)</small>
+                          </div>
+                        </PrimaryButton>
+
+                        <NotifyDropDown
+                          value={nOptions}
+                          onChange={(v) => setnOptions(v)}
+                        />
+                      </div>
+                    </div>
+                  </Transition>
+                </Cell>
+              </Row>
+            );
+          })}
 
           <Row>
             <Cell>Application for</Cell>

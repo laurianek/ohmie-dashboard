@@ -1,4 +1,5 @@
 import React from 'react';
+import { classNames } from '../../util/index.js';
 
 export function HeaderRow({ children }) {
   return (
@@ -8,9 +9,14 @@ export function HeaderRow({ children }) {
   );
 }
 
-export default function Row({ children }) {
+export default function Row({ children, className }) {
   return (
-    <div className="py-4 sm:grid sm:grid-cols-7 sm:gap-4 sm:items-center sm:py-5 text-sm">
+    <div
+      className={classNames(
+        className,
+        'py-4 sm:grid sm:grid-cols-7 sm:gap-x-4 sm:items-center sm:py-5 text-sm'
+      )}
+    >
       {children}
     </div>
   );
