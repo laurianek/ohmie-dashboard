@@ -8,13 +8,21 @@ export default function BondCard({ bond, className }) {
   const { changeCurrentBond, currentBondId } = useStore();
   const isActive = currentBondId === bond.token_name;
 
+  const toggleActiveBond = () => {
+    if (isActive) {
+      changeCurrentBond(undefined);
+      return;
+    }
+    changeCurrentBond(bond.token_name);
+  };
+
   return (
     <li
       className={classNames(
         className,
         'col-span-1 divide-y divide-lisbon-200 rounded-lg bg-lisbon-800 shadow cursor-pointer group'
       )}
-      onClick={() => changeCurrentBond(bond.token_name)}
+      onClick={toggleActiveBond}
     >
       <div className="relative overflow-hidden px-4 pt-14 pb-12 shadow sm:px-6 rounded-lg">
         <dt>

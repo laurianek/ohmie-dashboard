@@ -17,13 +17,21 @@ function App() {
   const [shownBonds, setShownBonds] = useState(PARTIAL);
   const { currentBondId } = useStore();
 
-  const getBondCardClassName = (i) => {
+  const getBondCardClassName = (i, isActive) => {
     if (shownBonds === ALL) return '';
-    if (shownBonds === ONE && i < 1) return '';
+    if (shownBonds === ONE && isActive) return '';
     if (shownBonds === PARTIAL && i < 2) return '';
     if (shownBonds === PARTIAL && i < 3) return 'hidden lg:block';
     return 'hidden';
   };
+  const toggleShownBonds = () =>
+    currentBondId
+      ? shownBonds === ALL
+        ? setShownBonds(ONE)
+        : setShownBonds(ALL)
+      : shownBonds === ALL
+      ? setShownBonds(PARTIAL)
+      : setShownBonds(ALL);
 
   return (
     <Dashboard>
@@ -35,10 +43,18 @@ function App() {
           <BondCard
             key={bond.token_name}
             bond={bond}
-            className={getBondCardClassName(index)}
+            className={getBondCardClassName(
+              index,
+              bond.token_name === currentBondId
+            )}
           />
         ))}
       </ul>
+      <div>
+        <button onClick={toggleShownBonds}>
+          {shownBonds === ALL ? 'View less' : 'View all bonds'}
+        </button>
+      </div>
 
       <div>
         <label
@@ -136,12 +152,12 @@ function App() {
 
       <p>Ohm bonds | expiry 2022-11-03</p>
       <p>
-        avaliable live market ?<span>price</span>
+        available live market ?<span>price</span>
         <span>buy</span>
       </p>
-      <p>gnosis opsion</p>
+      <p>gnosis option</p>
       <p>
-        avalaible secondary market market ?(secondary market is when you buy
+        available secondary market market ?(secondary market is when you buy
         from another user instead of the protocol)
       </p>
       <p>total quantity (Market dept)</p>
