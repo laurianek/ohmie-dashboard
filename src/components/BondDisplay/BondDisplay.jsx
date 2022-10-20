@@ -8,9 +8,10 @@ import Header from './Header.jsx';
 import Row, { HeaderRow } from './Row.jsx';
 import Cell from './Cell.jsx';
 import { FakeInput } from './FakeInput.jsx';
+import { useStore } from '../../store.jsx';
 
 export default function BondDisplay() {
-  const userStack = 9.45;
+  const { userStack } = useStore();
   const currentBond = Object.values(data.bonds)[0];
   const market = currentBond.live_markets[0];
 
@@ -33,20 +34,43 @@ export default function BondDisplay() {
             <div className="font-medium sm:col-span-2 text-paris-500 text-xl sm:text-sm">
               {market.exchange.name}
             </div>
-            <Cell label={'Price'}>{market.price} OHM</Cell>
+            <Cell label={'Price'}>
+              {market.price} {market.currency}
+            </Cell>
             <Cell label={'Discount'}>{market.discount}</Cell>
             <Cell label={'Comp. staking'}>{market.discount}</Cell>
             <Cell
               label={'You would get'}
               className="sm:col-span-2 flex justify-end flex-wrap gap-1.5"
             >
-              <FakeInput currency={'OHM'}>{12.78}</FakeInput>
+              <FakeInput currency={market.currency}>{userStack || 0}</FakeInput>
               <SecondaryButton className="min-w-[85px] min-h-[36px] my-0.5">
                 See Details
               </SecondaryButton>
-              <PrimaryButton className="min-w-[85px] min-h-[36px] my-0.5">
+              <PrimaryButton
+                link={market.buy_link}
+                className="min-w-[85px] min-h-[36px] my-0.5"
+              >
                 BUY
               </PrimaryButton>
+            </Cell>
+            <Cell className="col-span-5 col-start-3">
+              <div className="bg-lisbon-400 shadow rounded-lg px-4 py-5 sm:p-6 mt-3 text-black">
+                <div className="grid grid-cols-3 gap-4">
+                  {getExtraStats(market, userStack).map(
+                    ({ label, value }, i) => (
+                      <div key={`${label}-${i}`}>
+                        <div className="mt-1 flex items-baseline justify-between md:block lg:flex">
+                          <div className="flex items-baseline text-xl font-semibold text-parisII-200">
+                            {value}
+                          </div>
+                        </div>
+                        <div className="text-sm font-normal">{label}</div>
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
             </Cell>
           </Row>
 
@@ -58,4 +82,33 @@ export default function BondDisplay() {
       </div>
     </>
   );
+}
+
+function getExtraStats(market, userStack = 0, userPL = 0) {
+  const {
+    price,
+    currency,
+    remaining_available,
+    total_amount_available,
+    min_sale_price,
+    end_timestamp,
+    max_bondable_single_tx,
+  } = market;
+  const base = [
+    { label: 'Price', value: `${price} ${currency}` },
+    { label: 'You would get', value: userStack },
+    { label: 'Compared to staking', value: userPL },
+  ];
+
+  if (market.remaining_available) {
+    return base.concat([
+      { label: 'Remaining available', value: remaining_available },
+      { label: 'Max bondable', value: max_bondable_single_tx },
+    ]);
+  }
+  return base.concat([
+    { label: 'Total amount in auction', value: total_amount_available },
+    { label: 'Min. sale price', value: min_sale_price },
+    { label: 'Gnosis option ending', value: end_timestamp },
+  ]);
 }

@@ -1,10 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { calculate_rebase_for_x_days } from '../util/index.js';
+import { useStore } from '../store.jsx';
+
+const shortTime = 500;
 
 export default function YourStake() {
-  const [value, setValue] = useState('');
+  const { userStack, setUserStack } = useStore();
+  const [value, setValue] = useState(userStack);
+  const timeoutRef = useRef({ index: undefined });
   const handleChange = (e) => setValue(e.target.value);
   const rebases = calculate_rebase_for_x_days(value, 20);
+
+  useEffect(() => {
+    if (userStack !== value) {
+      clearTimeout(timeoutRef.current.index);
+      timeoutRef.current.index = setTimeout(
+        () => setUserStack(value),
+        shortTime
+      );
+    }
+  }, [value, userStack, timeoutRef]);
 
   return (
     <div className="sm:grid sm:grid-cols-3 lg:grid-cols-2 gap-4">

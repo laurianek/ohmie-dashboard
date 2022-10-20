@@ -10,6 +10,7 @@ export const ONE = 'one';
 export function useStoreTopLevel() {
   const [currentBondId, setCurrentBond] = useState(undefined);
   const [shownBonds, setShownBonds] = useState(PARTIAL);
+  const [userStack, setUserStack] = useState(1);
 
   const changeCurrentBond = (bondId) => {
     setShownBonds((v) => {
@@ -39,9 +40,11 @@ export function useStoreTopLevel() {
   return {
     currentBondId,
     shownBonds,
+    userStack,
     changeCurrentBond,
     getBondCardClassName,
     toggleShownBonds,
+    setUserStack,
   };
 }
 
