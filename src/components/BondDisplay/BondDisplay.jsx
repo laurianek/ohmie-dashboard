@@ -18,22 +18,23 @@ export default function BondDisplay() {
 
       <div className="mt-5 border-t border-lisbon-200">
         <div className="sm:divide-y sm:divide-lisbon-200">
-          <div className="py-4 sm:grid sm:grid-cols-7 sm:gap-4 sm:items-center sm:py-1 text-sm bg-lisbon-500">
-            <div className="mt-1 sm:col-span-1 sm:mt-0 sm:col-start-3">
-              Price
-            </div>
-            <div className="mt-1 sm:col-span-1 sm:mt-0">Discount</div>
-            <div className="mt-1 sm:col-span-1 sm:mt-0">Compare to staking</div>
-            <div className="mt-1 sm:col-span-1 sm:mt-0">You would get</div>
+          <div className="py-4 hidden sm:grid sm:grid-cols-7 sm:gap-4 sm:items-center sm:py-1 text-sm bg-lisbon-500">
+            <Cell className="sm:col-start-3">Price</Cell>
+            <Cell>Discount</Cell>
+            <Cell>Compare to staking</Cell>
+            <Cell>You would get</Cell>
           </div>
           <div className="py-4 sm:grid sm:grid-cols-7 sm:gap-4 sm:items-center sm:py-5 text-sm">
-            <div className="font-medium sm:col-span-2">
+            <div className="font-medium sm:col-span-2 text-paris-500 text-xl sm:text-sm">
               {market.exchange.name}
             </div>
-            <Cell>{market.price} OHM</Cell>
-            <Cell>{market.discount}</Cell>
-            <Cell>{market.discount}</Cell>
-            <Cell className="sm:col-span-2 flex justify-end flex-wrap gap-1.5">
+            <Cell label={'Price'}>{market.price} OHM</Cell>
+            <Cell label={'Discount'}>{market.discount}</Cell>
+            <Cell label={'Comp. staking'}>{market.discount}</Cell>
+            <Cell
+              label={'You would get'}
+              className="sm:col-span-2 flex justify-end flex-wrap gap-1.5"
+            >
               <div className="relative rounded-md shadow-sm text-sm flex-1">
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                   <span className="text-lisbon-400">OHM</span>
@@ -74,9 +75,14 @@ function Header({ title, subTitle }) {
   );
 }
 
-function Cell({ children, className = '' }) {
+function Cell({ children, className = '', label = '' }) {
   return (
-    <div className={classNames('mt-1 sm:col-span-1 sm:mt-0', className)}>
+    <div className={classNames('mt-1.5 sm:col-span-1 sm:mt-0', className)}>
+      {label && (
+        <span className="inline-flex sm:hidden items-center font-semibold text-lisbon-400 mr-2">
+          {label}
+        </span>
+      )}
       {children}
     </div>
   );

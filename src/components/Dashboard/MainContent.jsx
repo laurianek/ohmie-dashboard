@@ -10,7 +10,7 @@ export default function Main({ children, openSidebar }) {
       <div className="sticky top-0 z-10 bg-lisbon-500 text-lisbon-50 px-1 sm:pl-3 sm:py-1.5 flex items-center relative justify-between md:hidden">
         <MenuButton onClick={openSidebar} />
         <div className="inline-flex items-center text-sm">
-          <span className="inline-block pr-2">refreshing in</span>
+          <span className="hidden xs:inline-block pr-2">refreshing in</span>
           <Countdown initialCount={30} restart={restartRef.current.id} />
         </div>
         <h1 className="text-2xl font-semibold absolute left-0 right-0 text-center top-2 sm:top-3 pointer-events-none">

@@ -10,6 +10,9 @@ module.exports = {
         paris: colors.pink,
         parisII: colors.amber,
       },
+      screens: {
+        xs: '400px'
+      }
     },
   },
   plugins: [],

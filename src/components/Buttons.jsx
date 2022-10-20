@@ -1,7 +1,7 @@
 import React from 'react';
 import { classNames } from '../util';
 
-export function PlainButton({ onClick, children, className }) {
+export function PlainButton({ onClick, children, className = '' }) {
   return (
     <button
       onClick={onClick}
@@ -15,7 +15,7 @@ export function PlainButton({ onClick, children, className }) {
   );
 }
 
-export function PrimaryButton({ onClick, children, className }) {
+export function PrimaryButton({ onClick, children, className = '' }) {
   return (
     <button
       onClick={onClick}
@@ -30,7 +30,7 @@ export function PrimaryButton({ onClick, children, className }) {
   );
 }
 
-export function SecondaryButton({ onClick, children, className }) {
+export function SecondaryButton({ onClick, children, className = '' }) {
   return (
     <button
       onClick={onClick}
