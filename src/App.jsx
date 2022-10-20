@@ -15,7 +15,7 @@ import {
 import Dashboard from './components/Dashboard';
 
 import data from './assets/sample-data.js';
-import { classNames } from './util/index.js';
+import { classNames } from './util';
 import { format } from 'date-fns';
 
 function App() {

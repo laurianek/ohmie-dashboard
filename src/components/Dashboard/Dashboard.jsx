@@ -3,12 +3,8 @@ import { Dialog, Transition } from '@headlessui/react';
 import { classNames } from '../../util/index.js';
 import {
   Bars3Icon,
-  CalendarIcon,
   ChartBarIcon,
-  FolderIcon,
   HomeIcon,
-  InboxIcon,
-  UsersIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import UserProfile from './UserProfile.jsx';
@@ -62,7 +58,7 @@ export default function Dashboard({ children }) {
                 leaveFrom="translate-x-0"
                 leaveTo="-translate-x-full"
               >
-                <Dialog.Panel className="relative flex w-full max-w-xs flex-1 flex-col bg-gray-800">
+                <Dialog.Panel className="relative flex w-full max-w-xs flex-1 flex-col bg-lisbon-800">
                   <Transition.Child
                     as={Fragment}
                     enter="ease-in-out duration-300"
