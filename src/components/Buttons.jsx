@@ -36,7 +36,7 @@ export function SecondaryButton({ onClick, children, className = '' }) {
       onClick={onClick}
       type="button"
       className={classNames(
-        'inline-flex justify-center text-center items-center rounded border border-transparent bg-paris-100 px-2.5 py-1.5 text-xs font-medium text-paris-700 hover:bg-paris-200 focus:outline-none focus:ring-2 focus:ring-paris-500 focus:ring-offset-2',
+        'inline-flex justify-center text-center items-center rounded border border-transparent bg-paris-50 px-2.5 py-1.5 text-xs font-medium text-paris-700 hover:bg-paris-200 focus:outline-none focus:ring-2 focus:ring-paris-500 focus:ring-offset-2',
         className
       )}
     >

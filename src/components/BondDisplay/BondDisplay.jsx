@@ -16,15 +16,15 @@ export default function BondDisplay() {
         subTitle={format(new Date(currentBond.expiry_timestamp), 'PPPp')}
       />
 
-      <div className="mt-5 border-t border-lisbon-200">
-        <div className="sm:divide-y sm:divide-lisbon-200">
-          <div className="py-4 hidden sm:grid sm:grid-cols-7 sm:gap-4 sm:items-center sm:py-1 text-sm bg-lisbon-500">
+      <div className="mt-5 border-y border-lisbon-900">
+        <div className="sm:divide-y sm:divide-lisbon-400">
+          <HeaderRow>
             <Cell className="sm:col-start-3">Price</Cell>
             <Cell>Discount</Cell>
             <Cell>Compare to staking</Cell>
             <Cell>You would get</Cell>
-          </div>
-          <div className="py-4 sm:grid sm:grid-cols-7 sm:gap-4 sm:items-center sm:py-5 text-sm">
+          </HeaderRow>
+          <Row>
             <div className="font-medium sm:col-span-2 text-paris-500 text-xl sm:text-sm">
               {market.exchange.name}
             </div>
@@ -35,29 +35,20 @@ export default function BondDisplay() {
               label={'You would get'}
               className="sm:col-span-2 flex justify-end flex-wrap gap-1.5"
             >
-              <div className="relative rounded-md shadow-sm text-sm flex-1">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                  <span className="text-lisbon-400">OHM</span>
-                </div>
-                <div className="block flex-1 rounded-md border-lisbon-700 border-2 bg-lisbon-600 pl-14 pr-2 py-2">
-                  {12.78}
-                </div>
-              </div>
-              <SecondaryButton className="min-w-[85px] my-0.5">
-                see details
+              <FakeInput currency={'OHM'}>{12.78}</FakeInput>
+              <SecondaryButton className="min-w-[85px] min-h-[36px] my-0.5">
+                See Details
               </SecondaryButton>
-              <PrimaryButton className="min-w-[85px] my-0.5">BUY</PrimaryButton>
+              <PrimaryButton className="min-w-[85px] min-h-[36px] my-0.5">
+                BUY
+              </PrimaryButton>
             </Cell>
-          </div>
+          </Row>
 
-          <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
-            <dt className="text-sm font-medium text-lisbon-500">
-              Application for
-            </dt>
-            <dd className="mt-1 text-sm text-lisbon-900 sm:col-span-2 sm:mt-0">
-              Backend Developer
-            </dd>
-          </div>
+          <Row>
+            <Cell>Application for</Cell>
+            <Cell>Backend Developer</Cell>
+          </Row>
         </div>
       </div>
     </>
@@ -75,15 +66,44 @@ function Header({ title, subTitle }) {
   );
 }
 
+function HeaderRow({ children }) {
+  return (
+    <div className="py-4 hidden sm:grid sm:grid-cols-7 sm:gap-4 sm:items-center sm:py-1 text-sm bg-lisbon-700">
+      {children}
+    </div>
+  );
+}
+
+function Row({ children }) {
+  return (
+    <div className="py-4 sm:grid sm:grid-cols-7 sm:gap-4 sm:items-center sm:py-5 text-sm">
+      {children}
+    </div>
+  );
+}
+
 function Cell({ children, className = '', label = '' }) {
   return (
-    <div className={classNames('mt-1.5 sm:col-span-1 sm:mt-0', className)}>
+    <div className={classNames(className, 'mt-1.5 sm:mt-0')}>
       {label && (
         <span className="inline-flex sm:hidden items-center font-semibold text-lisbon-400 mr-2">
           {label}
         </span>
       )}
       {children}
+    </div>
+  );
+}
+
+function FakeInput({ children, currency }) {
+  return (
+    <div className="relative rounded-md shadow-sm text-sm flex-1">
+      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+        <span className="text-lisbon-400">{currency}</span>
+      </div>
+      <div className="block flex-1 rounded-md border-lisbon-700 border-2 bg-lisbon-600 pl-14 pr-2 py-2">
+        {children}
+      </div>
     </div>
   );
 }
