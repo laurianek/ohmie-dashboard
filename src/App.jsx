@@ -13,6 +13,7 @@ import {
   ChartBarIcon,
 } from '@heroicons/react/24/outline';
 import Dashboard from './components/Dashboard';
+import BondCard from './components/BondCard.jsx';
 
 import data from './assets/sample-data.js';
 import { classNames } from './util';
@@ -28,51 +29,7 @@ function App() {
         className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
       >
         {Object.values(data.bonds).map((bond) => (
-          <li
-            key={bond.token_name}
-            className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow"
-          >
-            <div className="relative overflow-hidden px-4 pt-14 pb-12 shadow sm:px-6 rounded-lg">
-              <dt>
-                <div className="absolute rounded-md bg-indigo-500 p-3 text-white">
-                  <OmegaIcon size={'35px'} aria-hidden="true" />
-                </div>
-                <p className="ml-16 pl-1 truncate text-sm font-medium text-gray-500">
-                  {format(new Date(bond.expiry_timestamp), 'PPPp')}
-                </p>
-              </dt>
-              <dd className="ml-16 pl-1 flex items-baseline pb-6 sm:pb-7">
-                <div className="absolute inset-x-0 top-0 px-4 py-4 sm:px-6">
-                  <div className="text-lg font-medium text-indigo-600 hover:text-indigo-500">
-                    {bond.display_name}
-                  </div>
-                </div>
-                <p className="text-2xl font-semibold text-gray-900">
-                  {Number(bond.best_price).toFixed(2)}
-                </p>
-                <p className="ml-1 flex items-baseline text-gray-900 text-sm font-semibold">
-                  {bond.currency}
-                </p>
-                <div className="absolute flex inset-x-0 bottom-0 divide-x bg-gray-50 px-4 py-4 sm:px-6">
-                  <div className="text-sm w-1/2">
-                    <a
-                      href="#"
-                      className="font-medium text-indigo-600 hover:text-indigo-500"
-                    >
-                      View details
-                    </a>
-                  </div>
-                  <div
-                    className={classNames(
-                      'text-right font-medium text-indigo-600 w-1/2'
-                    )}
-                  >
-                    Live
-                  </div>
-                </div>
-              </dd>
-            </div>
-          </li>
+          <BondCard key={bond.token_name} bond={bond} />
         ))}
       </ul>
 
@@ -192,23 +149,3 @@ function App() {
 }
 
 export default App;
-
-function OmegaIcon({ size = '10px' }) {
-  return (
-    <svg
-      viewBox="0 0 94.501 94.501"
-      width={size}
-      height={size}
-      style={{ stroke: 'currentcolor', fill: 'currentcolor' }}
-    >
-      <g>
-        <path
-          d="M34.07,78.892l-2.623-2.155c-3.064-2.513-13.056-11.978-13.056-28.296c0-17.932,11.818-29.52,30.112-29.52
-		c17.839,0,28.922,10.948,28.922,28.573c0,16.471-9.248,25.965-13.226,29.284l-2.571,2.149v11.014h32.873V75.582H83.936
-		c5.209-8.365,7.848-17.799,7.848-28.088c0-25.68-17.393-42.934-43.279-42.934C22.325,4.561,4.041,22.606,4.041,48.44
-		c0,9.521,2.705,19.052,7.663,27.142H0v14.359h34.071L34.07,78.892L34.07,78.892z"
-        />
-      </g>
-    </svg>
-  );
-}
