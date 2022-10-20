@@ -5,7 +5,7 @@ const _1sec = 1000;
 export default function Countdown({ initialCount = 0, restart }) {
   const [isCounting, setIsCounting] = useState(true);
   const [count, setCount] = useState(initialCount); // in seconds
-  const [_restart, setRestart] = useState(restart); // in seconds
+  const [_restart, setRestart] = useState(); // in seconds
   const ref = useRef({ index: undefined });
 
   const reduceCounter = () => {

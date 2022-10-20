@@ -3,11 +3,13 @@ export default {
   bonds: {
     'OHM-20221103': {
       token_name: 'OHM-20221103',
-      display_name: 'Ohm Bond - 3 November 2022',
+      display_name: 'Ohm Bonds',
       total_num_holders: 6,
       total_supply: 1625,
       expiry_timestamp: Date.now() + 1000,
       last_refresh: Date.now() - 1000,
+      best_price: 1.45,
+      currency: 'OHM',
       live_markets: [
         {
           exchange: {
@@ -50,27 +52,33 @@ export default {
     },
     'OHM-20221104': {
       token_name: 'OHM-20221104',
-      display_name: 'Ohm Bond - 4 November 2022',
+      display_name: 'Ohm Bonds',
       total_num_holders: 6,
       total_supply: 1625,
       expiry_timestamp: Date.now() + 1000,
       last_refresh: Date.now() - 1000,
+      best_price: 0.9512029,
+      currency: 'OHM',
     },
     'OHM-20221112': {
       token_name: 'OHM-20221112',
-      display_name: 'Ohm Bond - 12 November 2022',
+      display_name: 'Ohm Bonds',
       total_num_holders: 6,
       total_supply: 1625,
       expiry_timestamp: Date.now() + 1000,
       last_refresh: Date.now() - 1000,
+      best_price: 0.539024,
+      currency: 'OHM',
     },
     'OHM-20221120': {
       token_name: 'OHM-20221120',
-      display_name: 'Ohm Bond - 20 November 2022',
+      display_name: 'Ohm Bonds',
       total_num_holders: 6,
       total_supply: 1625,
       expiry_timestamp: Date.now() + 1000,
       last_refresh: Date.now() - 1000,
+      best_price: 0.65,
+      currency: 'OHM',
     },
   },
 };

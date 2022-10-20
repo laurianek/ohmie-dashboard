@@ -16,11 +16,16 @@ import Countdown from '../CountDown.jsx';
 
 const navigation = [
   { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Team', href: '#', icon: UsersIcon, current: false },
-  { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '#', icon: InboxIcon, current: false },
-  { name: 'Reports', href: '#', icon: ChartBarIcon, current: false },
+  {
+    name: 'More Feature (coming soon)',
+    href: '#',
+    icon: ChartBarIcon,
+    current: false,
+  },
+  // { name: 'Projects', href: '#', icon: FolderIcon, current: false },
+  // { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
+  // { name: 'Documents', href: '#', icon: InboxIcon, current: false },
+  // { name: 'Reports', href: '#', icon: ChartBarIcon, current: false },
 ];
 
 export default function Dashboard({ children }) {
@@ -166,36 +171,40 @@ export default function Dashboard({ children }) {
             <UserProfile />
           </div>
         </div>
-        <div className="flex flex-1 flex-col md:pl-64">
-          <div className="sticky top-0 z-10 bg-slate-500 pl-1 pt-1 sm:pl-3 sm:pt-3 md:hidden">
-            <button
-              type="button"
-              className="-ml-0.5 -mt-0.5 inline-flex h-12 w-12 items-center justify-center rounded-md text-slate-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-              onClick={() => setSidebarOpen(true)}
-            >
-              <span className="sr-only">Open sidebar</span>
-              <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-            </button>
-          </div>
-          <Main>{children}</Main>
-        </div>
+        <Main openSidebar={() => setSidebarOpen(true)}>{children}</Main>
       </div>
     </>
   );
 }
 
-function Main({ children }) {
+function Main({ children, openSidebar }) {
   return (
-    <main className="flex-1">
-      <div className="py-6">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-row text-slate-100 justify-between">
-          <h1 className="text-2xl font-semibold">Dashboard</h1>
-          <Countdown initialCount={30} restart={'97ewl9'} />
-        </div>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 text-slate-200">
-          {children}
-        </div>
+    <div className="flex flex-1 flex-col md:pl-64">
+      <div className="sticky top-0 z-10 bg-slate-500 pl-1 pt-1 sm:pl-3 sm:pt-3 md:hidden">
+        <button
+          type="button"
+          className="-ml-0.5 -mt-0.5 inline-flex h-12 w-12 items-center justify-center rounded-md text-slate-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+          onClick={openSidebar}
+        >
+          <span className="sr-only">Open sidebar</span>
+          <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+        </button>
+        <h1 className="text-2xl font-semibold">Dashboard</h1>
       </div>
-    </main>
+      <main className="flex-1">
+        <div className="py-6">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 hidden md:flex flex-row text-slate-100 justify-between items-center pb-2.5 ">
+            <h1 className="text-2xl font-semibold">Dashboard</h1>
+            <div className="inline-flex items-center">
+              <span className="inline-block pr-2">refreshing in</span>
+              <Countdown initialCount={30} restart={'9edmwl9'} />
+            </div>
+          </div>
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 text-slate-200">
+            {children}
+          </div>
+        </div>
+      </main>
+    </div>
   );
 }
