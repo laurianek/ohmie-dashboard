@@ -1,14 +1,11 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { classNames } from '../../util/index.js';
-import {
-  Bars3Icon,
-  ChartBarIcon,
-  HomeIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
+import { ChartBarIcon, HomeIcon } from '@heroicons/react/24/outline';
 import UserProfile from './UserProfile.jsx';
 import Main from './MainContent.jsx';
+import Logo from './Logo.jsx';
+import { NavCloseButton } from './Buttons.jsx';
+import NavItem from './NavItem.jsx';
 
 const navigation = [
   { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
@@ -26,7 +23,6 @@ const navigation = [
 
 export default function Dashboard({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
   const closeSidebar = () => setSidebarOpen(false);
   const openSidebar = () => setSidebarOpen(true);
 
@@ -111,80 +107,5 @@ export default function Dashboard({ children }) {
         <Main openSidebar={openSidebar}>{children}</Main>
       </div>
     </>
-  );
-}
-
-function NavItem({ item, isMobile }) {
-  if (isMobile) {
-    return (
-      <a
-        href={item.href}
-        className={classNames(
-          item.current
-            ? 'bg-lisbon-900 text-white'
-            : 'text-lisbon-300 hover:bg-lisbon-700 hover:text-white',
-          'group flex items-center px-2 py-2 text-base font-medium rounded-md'
-        )}
-      >
-        <item.icon
-          className={classNames(
-            item.current
-              ? 'text-paris-300'
-              : 'text-paris-400 group-hover:text-paris-300',
-            'mr-4 flex-shrink-0 h-6 w-6'
-          )}
-          aria-hidden="true"
-        />
-        {item.name}
-      </a>
-    );
-  }
-
-  return (
-    <a
-      href={item.href}
-      className={classNames(
-        item.current
-          ? 'bg-lisbon-900 text-white'
-          : 'text-lisbon-300 hover:bg-lisbon-700 hover:text-white',
-        'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
-      )}
-    >
-      <item.icon
-        className={classNames(
-          item.current
-            ? 'text-lisbon-300'
-            : 'text-lisbon-400 group-hover:text-lisbon-300',
-          'mr-3 flex-shrink-0 h-6 w-6'
-        )}
-        aria-hidden="true"
-      />
-      {item.name}
-    </a>
-  );
-}
-
-function NavCloseButton({ onClick }) {
-  return (
-    <button
-      type="button"
-      className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-      onClick={onClick}
-    >
-      <span className="sr-only">Close sidebar</span>
-      <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
-    </button>
-  );
-}
-
-function Logo() {
-  return (
-    <div className="flex flex-shrink-0 items-center px-4">
-      <img
-        className="h-8 w-auto"
-        src="https://tailwindui.com/img/logos/mark.svg?color=pink&shade=500"
-        alt="Your Company"
-      />
-    </div>
   );
 }
