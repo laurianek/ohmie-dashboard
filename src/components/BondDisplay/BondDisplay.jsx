@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { format } from 'date-fns';
 import {
   classNames,
@@ -7,18 +7,22 @@ import {
   getIntervalFromNow,
 } from '../../util';
 import data from '../../assets/sample-data.js';
+import notificationOptions from './NotificationOptions.js';
 
 import { PrimaryButton, SecondaryButton } from '../Buttons.jsx';
 import Header from './Header.jsx';
 import Row, { HeaderRow } from './Row.jsx';
 import Cell from './Cell.jsx';
 import { FakeInput } from './FakeInput.jsx';
+import NotifyDropDown from './NotifyDropDown.jsx';
 import { useStore } from '../../store.jsx';
 
 export default function BondDisplay() {
   const { userStack } = useStore();
   const currentBond = Object.values(data.bonds)[0];
   const market = currentBond.live_markets[0];
+  const [nOptions, setnOptions] = useState(notificationOptions[0].text);
+
   const dayDiff = getIntervalFromNow({
     timestamp: currentBond.expiry_timestamp,
   });
@@ -61,7 +65,7 @@ export default function BondDisplay() {
               label={'Comp. staking'}
               className={comparisonPerc < 0 ? 'text-red-500' : 'text-lime-300'}
             >
-              {comparisonPerc.toFixed('2')} %
+              {comparisonPerc.toFixed(2)} %
             </Cell>
             <Cell
               label={'You would get'}
@@ -100,6 +104,19 @@ export default function BondDisplay() {
                       </div>
                     )
                   )}
+                </div>
+                <div className="mt-6 flex w-full gap-4">
+                  <PrimaryButton size="md" className="min-w-[120px]">
+                    <div>
+                      Notify me <br />
+                      <small>(coming soon)</small>
+                    </div>
+                  </PrimaryButton>
+
+                  <NotifyDropDown
+                    value={nOptions}
+                    onChange={(v) => setnOptions(v)}
+                  />
                 </div>
               </div>
             </Cell>
