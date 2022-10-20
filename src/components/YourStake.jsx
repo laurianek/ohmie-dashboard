@@ -29,16 +29,13 @@ export default function YourStake() {
           />
         </div>
         <div className="block text-sm font-medium mt-5">
-          ~ What you could get if you keep staking till {'date'}
+          ~ What you would get if you keep staking till {'date'}
         </div>
         <div className="relative mt-1 rounded-md shadow-sm">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <span className="text-lisbon-400 sm:text-sm">OHM</span>
           </div>
-          <div
-            className="block w-full sm:text-sm rounded-md border-lisbon-700 border-2 bg-lisbon-600 pl-14 pr-1 py-2"
-            placeholder="0.00"
-          >
+          <div className="block w-full sm:text-sm rounded-md border-lisbon-700 border-2 bg-lisbon-600 pl-14 pr-1 py-2">
             {Number(rebases).toFixed(4)}
           </div>
         </div>
