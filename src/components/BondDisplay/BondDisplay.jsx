@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { format } from 'date-fns';
+import { format, formatDistance } from 'date-fns';
 import { Transition } from '@headlessui/react';
 import {
   classNames,
   calculate_bond_return,
   calculate_percent_return_bond_vs_staking,
   getIntervalFromNow,
+  numberWithCommas,
 } from '../../util';
 import data from '../../assets/sample-data.js';
 import notificationOptions from './NotificationOptions.js';
@@ -21,7 +22,6 @@ import { useStore } from '../../store.jsx';
 export default function BondDisplay() {
   const { userStack } = useStore();
   const currentBond = Object.values(data.bonds)[0];
-  const market = currentBond.live_markets[0];
   const [nOptions, setnOptions] = useState(notificationOptions[0].text);
   const [seeDetails, setSeeDetails] = useState({});
 
@@ -48,6 +48,7 @@ export default function BondDisplay() {
           </HeaderRow>
           {currentBond.live_markets.map((market, index) => {
             const bondReturn = calculate_bond_return(userStack, market.price);
+            const _1BondReturn = calculate_bond_return(1, market.price);
             const comparisonPercent = calculate_percent_return_bond_vs_staking(
               userStack,
               market.price,
@@ -85,13 +86,13 @@ export default function BondDisplay() {
                   className="sm:col-span-2 flex justify-end flex-wrap gap-1.5"
                 >
                   <FakeInput currency={market.currency}>
-                    {(bondReturn || 0).toFixed(4)}
+                    {numberWithCommas((bondReturn || 0).toFixed(4))}
                   </FakeInput>
                   <SecondaryButton
                     className="min-w-[85px] min-h-[36px] my-0.5"
                     onClick={toggleSeeDetails(index)}
                   >
-                    {!seeDetails[index] ? 'See details' : 'hide details'}
+                    {!seeDetails[index] ? 'See details' : 'Hide details'}
                   </SecondaryButton>
                   <PrimaryButton
                     link={market.buy_link}
@@ -115,7 +116,7 @@ export default function BondDisplay() {
                       <div className="grid grid-cols-3 gap-4">
                         {getExtraStats(
                           market,
-                          bondReturn,
+                          _1BondReturn,
                           comparisonPercent
                         ).map(
                           (
@@ -157,11 +158,6 @@ export default function BondDisplay() {
               </Row>
             );
           })}
-
-          <Row>
-            <Cell>Application for</Cell>
-            <Cell>Backend Developer</Cell>
-          </Row>
         </div>
       </div>
     </>
@@ -182,28 +178,40 @@ function getExtraStats(market, userStack = 0, userPL = 0) {
     { label: 'Price', value: `${price} ${currency}` },
     {
       label: 'Back for every 1 OHM you put in',
-      value: `${userStack.toFixed(4)}`,
+      value: `${numberWithCommas(userStack.toFixed(4))}`,
       className: userStack < 1 ? 'text-red-700' : 'text-lime-300',
     },
     {
       label: 'Compared to staking',
-      value: `${userPL.toFixed(2)} %`,
+      value: `${numberWithCommas(userPL.toFixed(2))} %`,
       className: userPL < 0 ? 'text-red-700' : 'text-lime-300',
     },
   ];
 
   if (market.remaining_available) {
     return base.concat([
-      { label: 'Remaining available', value: remaining_available },
+      {
+        label: 'Remaining available',
+        value: numberWithCommas(remaining_available),
+      },
       {
         label: 'Max bondable in one transaction',
-        value: max_bondable_single_tx,
+        value: numberWithCommas(max_bondable_single_tx),
       },
     ]);
   }
   return base.concat([
-    { label: 'Total amount in auction', value: total_amount_available },
-    { label: 'Min. sale price', value: min_sale_price },
-    { label: 'Gnosis option ending', value: end_timestamp },
+    {
+      label: 'Total amount in auction',
+      value: numberWithCommas(total_amount_available),
+    },
+    { label: 'Min. sale price', value: numberWithCommas(min_sale_price) },
+    {
+      label: 'Gnosis option ending',
+      value: formatDistance(new Date(end_timestamp * 1000), new Date(), {
+        includeSeconds: true,
+        addSuffix: true,
+      }),
+    },
   ]);
 }

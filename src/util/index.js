@@ -32,3 +32,9 @@ export function getIntervalFromNow({ timestamp, date }) {
     end: date || new Date(timestamp * 1000),
   });
 }
+
+export function numberWithCommas(x) {
+  var parts = x.toString().split('.');
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return parts.join('.');
+}

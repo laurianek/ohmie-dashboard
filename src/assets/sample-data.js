@@ -59,6 +59,8 @@ export default {
       last_refresh: Date.now() - 1000,
       best_price: 0.9512029,
       currency: 'OHM',
+      live_markets: [],
+      secondary_markets: [],
     },
     'OHM-20221112': {
       token_name: 'OHM-20221112',
@@ -69,6 +71,8 @@ export default {
       last_refresh: Date.now() - 1000,
       best_price: 0.539024,
       currency: 'OHM',
+      live_markets: [],
+      secondary_markets: [],
     },
     'OHM-20221120': {
       token_name: 'OHM-20221120',
@@ -79,6 +83,8 @@ export default {
       last_refresh: Date.now() - 1000,
       best_price: 0.65,
       currency: 'OHM',
+      live_markets: [],
+      secondary_markets: [],
     },
   },
 };
