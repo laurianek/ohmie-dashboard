@@ -8,7 +8,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import UserProfile from './UserProfile.jsx';
-import Countdown from '../CountDown.jsx';
+import Main from './MainContent.jsx';
 
 const navigation = [
   { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
@@ -26,6 +26,9 @@ const navigation = [
 
 export default function Dashboard({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const closeSidebar = () => setSidebarOpen(false);
+  const openSidebar = () => setSidebarOpen(true);
 
   return (
     <>
@@ -69,50 +72,14 @@ export default function Dashboard({ children }) {
                     leaveTo="opacity-0"
                   >
                     <div className="absolute top-0 right-0 -mr-12 pt-2">
-                      <button
-                        type="button"
-                        className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                        onClick={() => setSidebarOpen(false)}
-                      >
-                        <span className="sr-only">Close sidebar</span>
-                        <XMarkIcon
-                          className="h-6 w-6 text-white"
-                          aria-hidden="true"
-                        />
-                      </button>
+                      <NavCloseButton onClick={closeSidebar} />
                     </div>
                   </Transition.Child>
                   <div className="h-0 flex-1 overflow-y-auto pt-5 pb-4">
-                    <div className="flex flex-shrink-0 items-center px-4">
-                      <img
-                        className="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                        alt="Your Company"
-                      />
-                    </div>
+                    <Logo isMobile />
                     <nav className="mt-5 space-y-1 px-2">
                       {navigation.map((item) => (
-                        <a
-                          key={item.name}
-                          href={item.href}
-                          className={classNames(
-                            item.current
-                              ? 'bg-gray-900 text-white'
-                              : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                            'group flex items-center px-2 py-2 text-base font-medium rounded-md'
-                          )}
-                        >
-                          <item.icon
-                            className={classNames(
-                              item.current
-                                ? 'text-gray-300'
-                                : 'text-gray-400 group-hover:text-gray-300',
-                              'mr-4 flex-shrink-0 h-6 w-6'
-                            )}
-                            aria-hidden="true"
-                          />
-                          {item.name}
-                        </a>
+                        <NavItem key={item.name} item={item} isMobile />
                       ))}
                     </nav>
                   </div>
@@ -129,78 +96,95 @@ export default function Dashboard({ children }) {
         {/* Static sidebar for desktop */}
         <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex min-h-0 flex-1 flex-col bg-gray-800">
+          <div className="flex min-h-0 flex-1 flex-col bg-lisbon-800">
             <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
-              <div className="flex flex-shrink-0 items-center px-4">
-                <img
-                  className="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                  alt="Your Company"
-                />
-              </div>
+              <Logo />
               <nav className="mt-5 flex-1 space-y-1 px-2">
                 {navigation.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className={classNames(
-                      item.current
-                        ? 'bg-gray-900 text-white'
-                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                      'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
-                    )}
-                  >
-                    <item.icon
-                      className={classNames(
-                        item.current
-                          ? 'text-gray-300'
-                          : 'text-gray-400 group-hover:text-gray-300',
-                        'mr-3 flex-shrink-0 h-6 w-6'
-                      )}
-                      aria-hidden="true"
-                    />
-                    {item.name}
-                  </a>
+                  <NavItem key={item.name} item={item} />
                 ))}
               </nav>
             </div>
             <UserProfile />
           </div>
         </div>
-        <Main openSidebar={() => setSidebarOpen(true)}>{children}</Main>
+        <Main openSidebar={openSidebar}>{children}</Main>
       </div>
     </>
   );
 }
 
-function Main({ children, openSidebar }) {
+function NavItem({ item, isMobile }) {
+  if (isMobile) {
+    return (
+      <a
+        href={item.href}
+        className={classNames(
+          item.current
+            ? 'bg-lisbon-900 text-white'
+            : 'text-lisbon-300 hover:bg-lisbon-700 hover:text-white',
+          'group flex items-center px-2 py-2 text-base font-medium rounded-md'
+        )}
+      >
+        <item.icon
+          className={classNames(
+            item.current
+              ? 'text-paris-300'
+              : 'text-paris-400 group-hover:text-paris-300',
+            'mr-4 flex-shrink-0 h-6 w-6'
+          )}
+          aria-hidden="true"
+        />
+        {item.name}
+      </a>
+    );
+  }
+
   return (
-    <div className="flex flex-1 flex-col md:pl-64">
-      <div className="sticky top-0 z-10 bg-slate-500 pl-1 pt-1 sm:pl-3 sm:pt-3 md:hidden">
-        <button
-          type="button"
-          className="-ml-0.5 -mt-0.5 inline-flex h-12 w-12 items-center justify-center rounded-md text-slate-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-          onClick={openSidebar}
-        >
-          <span className="sr-only">Open sidebar</span>
-          <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-        </button>
-        <h1 className="text-2xl font-semibold">Dashboard</h1>
-      </div>
-      <main className="flex-1">
-        <div className="py-6">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 hidden md:flex flex-row text-slate-100 justify-between items-center pb-2.5 ">
-            <h1 className="text-2xl font-semibold">Dashboard</h1>
-            <div className="inline-flex items-center">
-              <span className="inline-block pr-2">refreshing in</span>
-              <Countdown initialCount={30} restart={'9edmwl9'} />
-            </div>
-          </div>
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 text-slate-200">
-            {children}
-          </div>
-        </div>
-      </main>
+    <a
+      href={item.href}
+      className={classNames(
+        item.current
+          ? 'bg-lisbon-900 text-white'
+          : 'text-lisbon-300 hover:bg-lisbon-700 hover:text-white',
+        'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
+      )}
+    >
+      <item.icon
+        className={classNames(
+          item.current
+            ? 'text-lisbon-300'
+            : 'text-lisbon-400 group-hover:text-lisbon-300',
+          'mr-3 flex-shrink-0 h-6 w-6'
+        )}
+        aria-hidden="true"
+      />
+      {item.name}
+    </a>
+  );
+}
+
+function NavCloseButton({ onClick }) {
+  return (
+    <button
+      type="button"
+      className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+      onClick={onClick}
+    >
+      <span className="sr-only">Close sidebar</span>
+      <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
+    </button>
+  );
+}
+
+function Logo() {
+  return (
+    <div className="flex flex-shrink-0 items-center px-4">
+      <img
+        className="h-8 w-auto"
+        src="https://tailwindui.com/img/logos/mark.svg?color=pink&shade=500"
+        alt="Your Company"
+      />
     </div>
   );
 }
