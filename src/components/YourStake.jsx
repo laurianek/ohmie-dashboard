@@ -1,15 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { calculate_rebase_for_x_days } from '../util/index.js';
+import {
+  calculate_rebase_for_x_days,
+  getIntervalFromNow,
+  getFormatIntervalFromNow,
+  numberWithCommas,
+} from '../util/index.js';
 import { useStore } from '../store.jsx';
 
 const shortTime = 500;
 
 export default function YourStake() {
-  const { userStack, setUserStack } = useStore();
+  const { userStack, setUserStack, currentBond } = useStore();
   const [value, setValue] = useState(userStack);
   const timeoutRef = useRef({ index: undefined });
   const handleChange = (e) => setValue(e.target.value);
-  const rebases = calculate_rebase_for_x_days(userStack, 20);
+
+  const dayDiff = currentBond
+    ? getIntervalFromNow({
+        timestamp: currentBond.expiry_timestamp,
+      })
+    : { days: 20 };
+  const rebases = calculate_rebase_for_x_days(userStack, dayDiff.days);
 
   useEffect(() => {
     if (userStack !== value) {
@@ -44,14 +55,18 @@ export default function YourStake() {
           />
         </div>
         <div className="block text-sm font-medium mt-5">
-          ~ What you would get if you keep staking till {'date'}
+          {currentBond
+            ? `~ What you would get ${getFormatIntervalFromNow({
+                timestamp: currentBond.expiry_timestamp,
+              })} if you keep staking`
+            : `~ What you would get if you keep staking for ${dayDiff.days} days`}
         </div>
         <div className="relative mt-1 rounded-md shadow-sm">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <span className="text-lisbon-400 sm:text-sm">OHM</span>
           </div>
           <div className="block w-full sm:text-sm rounded-md border-lisbon-700 border-2 bg-lisbon-600 pl-14 pr-1 py-2">
-            {Number(rebases).toFixed(4)}
+            {numberWithCommas(rebases.toFixed(4))}
           </div>
         </div>
       </div>

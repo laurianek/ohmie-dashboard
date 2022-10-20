@@ -7,11 +7,14 @@ import YourStake from './components/YourStake.jsx';
 import BondDisplay from './components/BondDisplay';
 import { PlainButton } from './components/Buttons.jsx';
 
-import data from './assets/sample-data.js';
-
 function App() {
-  const { currentBondId, shownBonds, getBondCardClassName, toggleShownBonds } =
-    useStore();
+  const {
+    currentBondId,
+    shownBonds,
+    getBondCardClassName,
+    toggleShownBonds,
+    data,
+  } = useStore();
 
   return (
     <Dashboard>

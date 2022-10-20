@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { format, formatDistance } from 'date-fns';
+import { format } from 'date-fns';
 import { Transition } from '@headlessui/react';
 import {
   classNames,
@@ -7,8 +7,8 @@ import {
   calculate_percent_return_bond_vs_staking,
   getIntervalFromNow,
   numberWithCommas,
+  getFormatIntervalFromNow,
 } from '../../util';
-import data from '../../assets/sample-data.js';
 import notificationOptions from './NotificationOptions.js';
 
 import { PrimaryButton, SecondaryButton } from '../Buttons.jsx';
@@ -20,13 +20,16 @@ import NotifyDropDown from './NotifyDropDown.jsx';
 import { useStore } from '../../store.jsx';
 
 export default function BondDisplay() {
-  const { userStack } = useStore();
-  const currentBond = Object.values(data.bonds)[0];
-  const [nOptions, setnOptions] = useState(notificationOptions[0].text);
+  const { userStack, currentBond, data } = useStore();
+  const [options, setOptions] = useState(notificationOptions[0].text);
   const [seeDetails, setSeeDetails] = useState({});
+  const aBond = currentBond || Object.values(data.bonds)[0];
+  const subTitle = currentBond
+    ? format(new Date(currentBond.expiry_timestamp * 1000), 'PPPp')
+    : '';
 
   const dayDiff = getIntervalFromNow({
-    timestamp: currentBond.expiry_timestamp,
+    timestamp: aBond.expiry_timestamp,
   });
   const toggleSeeDetails = (key) => () =>
     setSeeDetails((state) => ({ ...state, [key]: !state[key] }));
@@ -34,19 +37,20 @@ export default function BondDisplay() {
   return (
     <>
       <Header
-        title={currentBond.display_name}
-        subTitle={format(new Date(currentBond.expiry_timestamp * 1000), 'PPPp')}
+        title={currentBond ? currentBond.display_name : 'All Bond Markets'}
+        subTitle={subTitle}
       />
 
       <div className="mt-5 border-y border-lisbon-900">
         <div className="sm:divide-y sm:divide-lisbon-400">
           <HeaderRow>
+            <Cell className="pl-2">Live markets</Cell>
             <Cell className="sm:col-start-3">Price</Cell>
             <Cell>Discount</Cell>
             <Cell>Compare to staking</Cell>
             <Cell>You would get</Cell>
           </HeaderRow>
-          {currentBond.live_markets.map((market, index) => {
+          {aBond.live_markets.map((market, index) => {
             const bondReturn = calculate_bond_return(userStack, market.price);
             const _1BondReturn = calculate_bond_return(1, market.price);
             const comparisonPercent = calculate_percent_return_bond_vs_staking(
@@ -123,12 +127,12 @@ export default function BondDisplay() {
                             { label, value, className = 'text-parisII-50' },
                             i
                           ) => (
-                            <div key={`${label}-${i}`}>
+                            <div key={`${label}-${i}`} className="">
                               <div className="mt-1 flex items-baseline justify-between md:block lg:flex">
                                 <div
                                   className={classNames(
                                     className,
-                                    'flex items-baseline text-xl font-semibold'
+                                    'flex items-baseline text-lg sm:text-xl font-semibold truncate'
                                   )}
                                 >
                                   {value}
@@ -139,7 +143,7 @@ export default function BondDisplay() {
                           )
                         )}
                       </div>
-                      <div className="mt-6 flex w-full gap-4">
+                      <div className="mt-6 flex w-full gap-4 items-start sm:items-stretch">
                         <PrimaryButton size="md" className="min-w-[120px]">
                           <div>
                             Notify me <br />
@@ -148,8 +152,8 @@ export default function BondDisplay() {
                         </PrimaryButton>
 
                         <NotifyDropDown
-                          value={nOptions}
-                          onChange={(v) => setnOptions(v)}
+                          value={options}
+                          onChange={(v) => setOptions(v)}
                         />
                       </div>
                     </div>
@@ -175,7 +179,7 @@ function getExtraStats(market, userStack = 0, userPL = 0) {
     max_bondable_single_tx,
   } = market;
   const base = [
-    { label: 'Price', value: `${price} ${currency}` },
+    { label: 'Price', value: `${Number(price).toFixed(2)} ${currency}` },
     {
       label: 'Back for every 1 OHM you put in',
       value: `${numberWithCommas(userStack.toFixed(4))}`,
@@ -208,10 +212,7 @@ function getExtraStats(market, userStack = 0, userPL = 0) {
     { label: 'Min. sale price', value: numberWithCommas(min_sale_price) },
     {
       label: 'Gnosis option ending',
-      value: formatDistance(new Date(end_timestamp * 1000), new Date(), {
-        includeSeconds: true,
-        addSuffix: true,
-      }),
+      value: getFormatIntervalFromNow({ timestamp: end_timestamp }),
     },
   ]);
 }

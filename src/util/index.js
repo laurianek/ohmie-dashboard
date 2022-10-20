@@ -1,5 +1,5 @@
 import { rebaseRate } from '../constants/index.js';
-import { intervalToDuration } from 'date-fns';
+import { formatDistance, intervalToDuration } from 'date-fns';
 
 export function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -30,6 +30,13 @@ export function getIntervalFromNow({ timestamp, date }) {
   return intervalToDuration({
     start: new Date(),
     end: date || new Date(timestamp * 1000),
+  });
+}
+
+export function getFormatIntervalFromNow({ timestamp, date }) {
+  return formatDistance(date || new Date(timestamp * 1000), new Date(), {
+    includeSeconds: true,
+    addSuffix: true,
   });
 }
 
