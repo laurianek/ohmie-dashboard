@@ -1,17 +1,6 @@
-import React from 'react';
-import {
-  EnvelopeIcon,
-  PhoneIcon,
-  PaperClipIcon,
-} from '@heroicons/react/20/solid';
-import reactLogo from './assets/react.svg';
+import React, { useState } from 'react';
+import { useStore } from './store.jsx';
 import './App.css';
-import {
-  CursorArrowRaysIcon,
-  EnvelopeOpenIcon,
-  UsersIcon,
-  ChartBarIcon,
-} from '@heroicons/react/24/outline';
 import Dashboard from './components/Dashboard';
 import BondCard from './components/BondCard.jsx';
 
@@ -19,8 +8,22 @@ import data from './assets/sample-data.js';
 import { classNames } from './util';
 import { format } from 'date-fns';
 
+const PARTIAL = 'partial';
+const ALL = 'all';
+const ONE = 'one';
+
 function App() {
   const currentBond = Object.values(data.bonds)[0];
+  const [shownBonds, setShownBonds] = useState(PARTIAL);
+  const { currentBondId } = useStore();
+
+  const getBondCardClassName = (i) => {
+    if (shownBonds === ALL) return '';
+    if (shownBonds === ONE && i < 1) return '';
+    if (shownBonds === PARTIAL && i < 2) return '';
+    if (shownBonds === PARTIAL && i < 3) return 'hidden lg:block';
+    return 'hidden';
+  };
 
   return (
     <Dashboard>
@@ -28,8 +31,12 @@ function App() {
         role="list"
         className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
       >
-        {Object.values(data.bonds).map((bond) => (
-          <BondCard key={bond.token_name} bond={bond} />
+        {Object.values(data.bonds).map((bond, index) => (
+          <BondCard
+            key={bond.token_name}
+            bond={bond}
+            className={getBondCardClassName(index)}
+          />
         ))}
       </ul>
 

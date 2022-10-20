@@ -8,6 +8,7 @@ module.exports = {
       colors: {
         lisbon: colors.zinc,
         paris: colors.pink,
+        parisII: colors.amber,
       },
     },
   },
