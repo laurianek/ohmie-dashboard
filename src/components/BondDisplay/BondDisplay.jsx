@@ -29,7 +29,7 @@ export default function BondDisplay() {
         subTitle={subTitle}
       />
 
-      <div className="mt-5 border-y border-lisbon-900">
+      <div className="mt-5 border-t border-lisbon-900">
         <div className="sm:divide-y sm:divide-lisbon-400">
           <HeaderRow>
             <Cell className="pl-2 sm:col-span-2">Live markets</Cell>
@@ -64,7 +64,9 @@ export default function BondDisplay() {
               <MarketDetails
                 userStack={userStack}
                 market={market}
-                expiryTimestamp={currentBond?.expiry_timestamp}
+                expiryTimestamp={
+                  currentBond?.expiry_timestamp || market.bond_expiry_timestamp
+                }
                 key={`live-market-${index}`}
                 index={index}
                 isSecondary
@@ -101,5 +103,16 @@ function getAllMarketType(type, data) {
         }))
       )
       .flat();
-  return [];
+  return Object.values(data.bonds)
+    .map(({ secondary_markets, expiry_timestamp }) =>
+      secondary_markets.map((m) => ({
+        ...m,
+        bond_expiry_timestamp: expiry_timestamp,
+        _extra: {
+          label:
+            'Bond for ' + getFormatBondExpiry({ timestamp: expiry_timestamp }),
+        },
+      }))
+    )
+    .flat();
 }

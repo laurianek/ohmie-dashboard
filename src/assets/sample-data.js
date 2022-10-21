@@ -46,7 +46,7 @@ export default {
             name: 'Uniswap v3',
           },
           market_dept: 0,
-          price: 0,
+          price: 0.993453,
           currency: 'OHM',
           pairs: ['OHM', 'OHM-20221103'],
           buy_link: '#',

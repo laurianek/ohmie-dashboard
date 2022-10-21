@@ -6,6 +6,7 @@ import Main from './MainContent.jsx';
 import Logo from './Logo.jsx';
 import { NavCloseButton } from './Buttons.jsx';
 import NavItem from './NavItem.jsx';
+import Footer from '../Footer.jsx';
 
 const navigation = [
   { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
@@ -105,6 +106,7 @@ export default function Dashboard({ children }) {
           </div>
         </div>
         <Main openSidebar={openSidebar}>{children}</Main>
+        <Footer />
       </div>
     </>
   );
