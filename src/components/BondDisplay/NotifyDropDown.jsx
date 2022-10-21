@@ -4,7 +4,7 @@ import {
   CheckIcon,
   ChevronUpDownIcon,
 } from '@heroicons/react/20/solid/index.js';
-import notificationOptions from './NotificationOptions.js';
+import notificationOptions from './notificationOptions.js';
 import { classNames } from '../../util/index.js';
 
 export default function NotifyDropDown({ value, onChange }) {
