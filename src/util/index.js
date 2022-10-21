@@ -2,7 +2,10 @@ import { rebaseRate } from '../constants/index.js';
 import { formatDistance, intervalToDuration } from 'date-fns';
 
 export function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
+  return classes
+    .map((fn) => (fn.call ? fn() : fn))
+    .filter(Boolean)
+    .join(' ');
 }
 
 export function calculate_rebase_for_x_days(value, numDays) {

@@ -20,18 +20,32 @@ export function PlainButton({ onClick, children, className = '', size }) {
   );
 }
 
-export function PrimaryButton({ onClick, children, className = '', size }) {
+export function PrimaryButton({
+  onClick,
+  children,
+  className = '',
+  size,
+  colour,
+}) {
   return (
     <button
       onClick={onClick}
       type="button"
       className={classNames(
-        'inline-flex justify-center text-center items-center border border-transparent bg-paris-600 px-2.5 py-1.5 font-medium text-white shadow-sm hover:bg-paris-700 focus:outline-none focus:ring-2 focus:ring-paris-500 focus:ring-offset-2',
+        'inline-flex justify-center text-center items-center border border-transparent px-2.5 py-1.5 font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2',
         size === 'lg'
           ? 'text-lg rounded-md'
           : size === 'md'
           ? 'text-base rounded-md'
           : 'text-xs rounded',
+        () => {
+          switch (colour) {
+            case 'green':
+              return 'bg-lime-600 hover:bg-lime-700 focus:ring-lime-500';
+            default:
+              return 'bg-paris-600 hover:bg-paris-700 focus:ring-paris-500';
+          }
+        },
         className
       )}
     >

@@ -30,11 +30,11 @@ export default function BondDisplay() {
       <div className="mt-5 border-y border-lisbon-900">
         <div className="sm:divide-y sm:divide-lisbon-400">
           <HeaderRow>
-            <Cell className="pl-2 col-span-2">Live markets</Cell>
+            <Cell className="pl-2 sm:col-span-2">Live markets</Cell>
             <Cell className="sm:col-start-3">Price</Cell>
             <Cell>Discount</Cell>
             <Cell>Compare to staking</Cell>
-            <Cell>You would get</Cell>
+            <Cell className="sm:col-span-2">You would get</Cell>
           </HeaderRow>
           {liveMarkets.length !== 0 &&
             liveMarkets.map((market, index) => (
@@ -50,7 +50,10 @@ export default function BondDisplay() {
             <MarketEmpty>No current live markets available</MarketEmpty>
           )}
           <HeaderRow>
-            <Cell className="pl-2 col-span-2">Secondary markets</Cell>
+            <Cell className="pl-2 sm:col-span-2">Secondary markets</Cell>
+            <Cell>Price</Cell>
+            <Cell>Compare to staking</Cell>
+            <Cell className="sm:col-span-3">You would get</Cell>
           </HeaderRow>
           {secondaryMarkets.length !== 0 &&
             secondaryMarkets.map((market, index) => (
@@ -60,6 +63,7 @@ export default function BondDisplay() {
                 bond={currentBond}
                 key={`live-market-${index}`}
                 index={index}
+                isSecondary
               />
             ))}
           {secondaryMarkets.length === 0 && (

@@ -16,7 +16,13 @@ import { FakeInput } from './FakeInput.jsx';
 import { PrimaryButton, SecondaryButton } from '../Buttons.jsx';
 import NotifyDropDown from './NotifyDropDown.jsx';
 
-export default function MarketDetails({ market, userStack, bond, index }) {
+export default function MarketDetails({
+  market,
+  userStack,
+  bond,
+  index,
+  isSecondary = false,
+}) {
   const [seeDetails, setSeeDetails] = useState({});
   const [options, setOptions] = useState(notificationOptions[0].text);
 
@@ -41,12 +47,14 @@ export default function MarketDetails({ market, userStack, bond, index }) {
       <Cell label={'Price'}>
         {market.price} {market.currency}
       </Cell>
-      <Cell
-        label={'Discount'}
-        className={parseFloat(market.discount) < 0 ? 'text-red-500' : ''}
-      >
-        {parseFloat(market.discount).toFixed(2)} %
-      </Cell>
+      {!isSecondary && (
+        <Cell
+          label={'Discount'}
+          className={parseFloat(market.discount) < 0 ? 'text-red-500' : ''}
+        >
+          {parseFloat(market.discount).toFixed(2)} %
+        </Cell>
+      )}
       <Cell
         label={'Comp. staking'}
         className={comparisonPercent < 0 ? 'text-red-500' : 'text-lime-300'}
@@ -55,23 +63,37 @@ export default function MarketDetails({ market, userStack, bond, index }) {
       </Cell>
       <Cell
         label={'You would get'}
-        className="sm:col-span-2 flex justify-end flex-wrap gap-1.5"
+        className={classNames(
+          isSecondary ? 'sm:col-span-3' : 'sm:col-span-2',
+          'flex justify-end flex-wrap gap-1.5'
+        )}
       >
         <FakeInput currency={market.currency}>
           {numberWithCommas((bondReturn || 0).toFixed(4))}
         </FakeInput>
-        <SecondaryButton
-          className="min-w-[85px] min-h-[36px] my-0.5"
-          onClick={toggleSeeDetails(index)}
-        >
-          {!seeDetails[index] ? 'See details' : 'Hide details'}
-        </SecondaryButton>
+        {!isSecondary && (
+          <SecondaryButton
+            className="min-w-[85px] min-h-[36px] my-0.5"
+            onClick={toggleSeeDetails(index)}
+          >
+            {!seeDetails[index] ? 'See details' : 'Hide details'}
+          </SecondaryButton>
+        )}
         <PrimaryButton
           link={market.buy_link}
           className="min-w-[85px] min-h-[36px] my-0.5"
+          colour={isSecondary ? 'green' : ''}
         >
           BUY
         </PrimaryButton>
+        {market.sell_link && (
+          <PrimaryButton
+            link={market.buy_link}
+            className="min-w-[85px] min-h-[36px] my-0.5"
+          >
+            SELL
+          </PrimaryButton>
+        )}
       </Cell>
 
       <Cell className="col-span-5 col-start-3">
@@ -86,23 +108,24 @@ export default function MarketDetails({ market, userStack, bond, index }) {
         >
           <div className="bg-lisbon-400 shadow rounded-lg px-4 py-5 sm:p-6 mt-3 text-black">
             <div className="grid grid-cols-3 gap-4">
-              {getExtraStats(market, _1BondReturn, comparisonPercent).map(
-                ({ label, value, className = 'text-parisII-50' }, i) => (
-                  <div key={`${label}-${i}`} className="">
-                    <div className="mt-1 flex items-baseline justify-between md:block lg:flex">
-                      <div
-                        className={classNames(
-                          className,
-                          'flex items-baseline text-lg sm:text-xl font-semibold truncate'
-                        )}
-                      >
-                        {value}
+              {!isSecondary &&
+                getExtraStats(market, _1BondReturn, comparisonPercent).map(
+                  ({ label, value, className = 'text-parisII-50' }, i) => (
+                    <div key={`${label}-${i}`} className="">
+                      <div className="mt-1 flex items-baseline justify-between md:block lg:flex">
+                        <div
+                          className={classNames(
+                            className,
+                            'flex items-baseline text-lg sm:text-xl font-semibold truncate'
+                          )}
+                        >
+                          {value}
+                        </div>
                       </div>
+                      <div className="text-sm font-normal">{label}</div>
                     </div>
-                    <div className="text-sm font-normal">{label}</div>
-                  </div>
-                )
-              )}
+                  )
+                )}
             </div>
             <div className="mt-6 flex w-full gap-4 items-start sm:items-stretch">
               <PrimaryButton size="md" className="min-w-[120px]">

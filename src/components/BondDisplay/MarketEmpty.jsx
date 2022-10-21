@@ -6,14 +6,11 @@ import React from 'react';
 export default function MarketEmpty({ action = false, children }) {
   return (
     <div className="text-center pb-4">
-      <div
-        data-name="Canvas"
-        className="w-1/2 min-w-[200px] mx-auto relative min-h-[150px]"
-      >
+      <Canvas>
         <Bond style={{ left: 'calc(50% + 10px)', top: 'calc(50% + 5px)' }} />
         <Bond style={{ left: 'calc(50%)', top: 'calc(50%)' }} />
         <Bond style={{ left: 'calc(50% - 10px)', top: 'calc(50% - 5px)' }} />
-      </div>
+      </Canvas>
       <h4 className="mt-2 font-medium">{children}</h4>
       {action && (
         <div className="mt-6">
@@ -23,6 +20,17 @@ export default function MarketEmpty({ action = false, children }) {
           </PrimaryButton>
         </div>
       )}
+    </div>
+  );
+}
+
+function Canvas({ children }) {
+  return (
+    <div
+      data-name="Canvas"
+      className="w-1/2 min-w-[200px] mx-auto relative min-h-[150px]"
+    >
+      {children}
     </div>
   );
 }
