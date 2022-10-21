@@ -42,6 +42,8 @@ export function PrimaryButton({
           switch (colour) {
             case 'green':
               return 'bg-lime-600 hover:bg-lime-700 focus:ring-lime-500';
+            case 'red':
+              return 'bg-red-600 hover:bg-red-700 focus:ring-red-500';
             default:
               return 'bg-paris-600 hover:bg-paris-700 focus:ring-paris-500';
           }

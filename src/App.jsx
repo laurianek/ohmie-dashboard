@@ -35,15 +35,14 @@ function App() {
       </ul>
       <div className="flex justify-end pt-2 pb-3">
         <PlainButton onClick={toggleShownBonds}>
-          {shownBonds === ALL ? 'View less' : 'View all bonds'}
+          {shownBonds === ALL ? '[-] View less' : '[+] View all bonds'}
         </PlainButton>
       </div>
-
       <YourStake />
       <BondDisplay />
 
       {/*<p>*/}
-      {/*  available secondary market market ?(secondary market is when you buy*/}
+      {/*  available secondary market ?(secondary market is when you buy*/}
       {/*  from another user instead of the protocol)*/}
       {/*</p>*/}
       {/*<p>total quantity (Market dept)</p>*/}
@@ -51,6 +50,7 @@ function App() {
       {/*<p>sell on the secondary market</p>*/}
       {/*<p>redeem (number of days till can redeem)</p>*/}
       {/*<p>staking rebase rate</p>*/}
+      {/*<p>request secondary market liquidity</p>*/}
     </Dashboard>
   );
 }

@@ -19,7 +19,7 @@ import NotifyDropDown from './NotifyDropDown.jsx';
 export default function MarketDetails({
   market,
   userStack,
-  bond,
+  expiryTimestamp,
   index,
   isSecondary = false,
 }) {
@@ -29,7 +29,7 @@ export default function MarketDetails({
   const bondReturn = calculate_bond_return(userStack, market.price);
   const _1BondReturn = calculate_bond_return(1, market.price);
   const dayDiff = getIntervalFromNow({
-    timestamp: bond.expiry_timestamp,
+    timestamp: expiryTimestamp,
   });
   const comparisonPercent = calculate_percent_return_bond_vs_staking(
     userStack,
@@ -42,7 +42,8 @@ export default function MarketDetails({
   return (
     <Row className={!seeDetails[index] ? 'sm:gap-y-0' : 'sm:gap-y-4'}>
       <div className="font-medium sm:col-span-2 text-paris-500 text-xl sm:text-sm">
-        {market.exchange.name}
+        {market.exchange.name} <br />
+        {market._extra?.label}
       </div>
       <Cell label={'Price'}>
         {market.price} {market.currency}
@@ -90,6 +91,7 @@ export default function MarketDetails({
           <PrimaryButton
             link={market.buy_link}
             className="min-w-[85px] min-h-[36px] my-0.5"
+            colour="red"
           >
             SELL
           </PrimaryButton>

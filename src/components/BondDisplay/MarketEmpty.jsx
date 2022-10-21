@@ -3,7 +3,7 @@ import { PrimaryButton } from '../Buttons.jsx';
 import { PlusIcon } from '@heroicons/react/20/solid/index.js';
 import React from 'react';
 
-export default function MarketEmpty({ action = false, children }) {
+export default function MarketEmpty({ actions = false, children }) {
   return (
     <div className="text-center pb-4">
       <Canvas>
@@ -12,14 +12,15 @@ export default function MarketEmpty({ action = false, children }) {
         <Bond style={{ left: 'calc(50% - 10px)', top: 'calc(50% - 5px)' }} />
       </Canvas>
       <h4 className="mt-2 font-medium">{children}</h4>
-      {action && (
-        <div className="mt-6">
-          <PrimaryButton size="md">
-            <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-            {action.text || 'Add Liquidity (coming soon)'}
-          </PrimaryButton>
-        </div>
-      )}
+      {actions &&
+        actions.map(({ text }) => (
+          <div className="mt-6">
+            <PrimaryButton size="md">
+              <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+              {text || 'Add Liquidity (coming soon)'}
+            </PrimaryButton>
+          </div>
+        ))}
     </div>
   );
 }

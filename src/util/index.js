@@ -1,5 +1,5 @@
 import { rebaseRate } from '../constants/index.js';
-import { formatDistance, intervalToDuration } from 'date-fns';
+import { formatDistance, intervalToDuration, format } from 'date-fns';
 
 export function classNames(...classes) {
   return classes
@@ -41,6 +41,10 @@ export function getFormatIntervalFromNow({ timestamp, date }) {
     includeSeconds: true,
     addSuffix: true,
   });
+}
+
+export function getFormatBondExpiry({ timestamp, date }) {
+  return format(date || new Date(timestamp * 1000), 'PPPp');
 }
 
 export function numberWithCommas(x) {

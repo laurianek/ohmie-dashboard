@@ -1,6 +1,5 @@
 import React from 'react';
-import { format } from 'date-fns';
-import { classNames } from '../util/index.js';
+import { classNames, getFormatBondExpiry } from '../util/index.js';
 import { OmegaIcon } from './Icons.jsx';
 import { useStore } from '../store.jsx';
 
@@ -37,7 +36,7 @@ export default function BondCard({ bond, className }) {
             <OmegaIcon size={'35px'} aria-hidden="true" />
           </div>
           <p className="ml-16 pl-1 truncate text-sm font-medium text-lisbon-400">
-            {format(new Date(bond.expiry_timestamp * 1000), 'PPPp')}
+            {getFormatBondExpiry({ timestamp: bond.expiry_timestamp })}
           </p>
         </dt>
         <dd className="ml-16 pl-1 flex items-baseline pb-6 sm:pb-7">
