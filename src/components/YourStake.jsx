@@ -42,13 +42,14 @@ export default function YourStake() {
           Your stack to exchange
         </label>
         <div className="relative mt-1 rounded-md shadow-sm">
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <div className="pointer-events-none absolute inset-y-0 left-0 top-0 flex items-center pl-3">
             <span className="text-lisbon-400 sm:text-sm">OHM</span>
           </div>
           <input
             type="number"
             className="block w-full sm:text-sm rounded-md border-lisbon-300 bg-lisbon-700 pl-14 pr-1 py-2 focus:outline-none focus:ring-2 focus:ring focus:ring-paris-400"
             placeholder="0.00"
+            min={0}
             aria-describedby="your stack"
             value={value}
             onChange={handleChange}
