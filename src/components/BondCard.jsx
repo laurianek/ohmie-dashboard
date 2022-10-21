@@ -69,20 +69,36 @@ export default function BondCard({ bond, className }) {
                   'font-medium'
                 )}
               >
-                View details
+                {isActive ? 'Current' : 'View details'}
               </a>
             </div>
             <div
               className={classNames(
                 isActive ? 'text-parisII-100' : 'text-paris-200',
-                'text-right font-medium w-1/2'
+                'font-medium w-1/2 flex items-center justify-end'
               )}
             >
-              Live
+              {bond.live_markets.length > 0 ? 'Live' : 'Secondary'}{' '}
+              <PulsingDot />
             </div>
           </div>
         </dd>
       </div>
     </li>
+  );
+}
+
+function PulsingDot() {
+  return (
+    <div className="ring-container inline-block relative ml-2">
+      <div
+        data-name="ringring"
+        className="border-[1px] border-current absolute w-[12px] h-[12px] rounded-full left-[-1px] top-[-1px] opacity-70 animate-ping"
+      />
+      <div
+        data-name="circle"
+        className="w-[10px] h-[10px] bg-current rounded-full"
+      />
+    </div>
   );
 }
