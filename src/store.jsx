@@ -1,5 +1,4 @@
-import React, { useState, useContext, createContext } from 'react';
-import initialData from './assets/sample-data.js';
+import React, { useState, useContext, createContext, useEffect } from 'react';
 
 const StoreContext = createContext(null);
 StoreContext.displayName = 'StoreContext';
@@ -10,11 +9,17 @@ export const ONE = 'one';
 
 export function useStoreTopLevel() {
   const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState();
   const [currentBondId, setCurrentBond] = useState(undefined);
   const [shownBonds, setShownBonds] = useState(PARTIAL);
   const [userStack, setUserStack] = useState(1);
   const currentBond = currentBondId ? data.bonds[currentBondId] : undefined;
+
+  const fetchDataFromServer = async () => {
+    const res = await fetch('https://ohmie-dashboard-backend.herokuapp.com/');
+    const _data = await res.json();
+    setData(_data);
+  };
 
   const changeCurrentBond = (bondId) => {
     setShownBonds((v) => {
@@ -40,6 +45,17 @@ export function useStoreTopLevel() {
       : shownBonds === ALL
       ? setShownBonds(PARTIAL)
       : setShownBonds(ALL);
+
+  useEffect(() => {
+    function init() {
+      return fetchDataFromServer();
+    }
+    init();
+  }, []);
+
+  useEffect(() => {
+    if (data) setLoading(false);
+  }, [data]);
 
   return {
     data,

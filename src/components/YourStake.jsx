@@ -11,18 +11,8 @@ const shortTime = 500;
 
 export default function YourStake() {
   const { userStack, setUserStack, currentBond, isLoading } = useStore();
-  if (isLoading) return <Placeholder />;
-
   const [value, setValue] = useState(userStack);
   const timeoutRef = useRef({ index: undefined });
-  const handleChange = (e) => setValue(e.target.value);
-
-  const dayDiff = currentBond
-    ? getIntervalFromNow({
-        timestamp: currentBond.expiry_timestamp,
-      })
-    : { days: 20 };
-  const rebases = calculate_rebase_for_x_days(userStack, dayDiff.days);
 
   useEffect(() => {
     if (userStack !== value) {
@@ -33,6 +23,17 @@ export default function YourStake() {
       }, shortTime);
     }
   }, [value, userStack, timeoutRef]);
+
+  const handleChange = (e) => setValue(e.target.value);
+
+  const dayDiff = currentBond
+    ? getIntervalFromNow({
+        timestamp: currentBond.expiry_timestamp,
+      })
+    : { days: 20 };
+  const rebases = calculate_rebase_for_x_days(userStack, dayDiff.days);
+
+  if (isLoading) return <Placeholder />;
 
   return (
     <div className="sm:grid sm:grid-cols-3 lg:grid-cols-2 gap-4">

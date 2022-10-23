@@ -24,9 +24,10 @@ function App() {
         className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
       >
         {!isLoading &&
+          data?.bonds &&
           Object.values(data?.bonds).map((bond, index) => (
             <BondCard
-              key={bond.token_name}
+              key={bond.address}
               bond={bond}
               className={getBondCardClassName(
                 index,

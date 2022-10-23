@@ -13,7 +13,7 @@ export default function BondCard({ bond, className }) {
       changeCurrentBond(undefined);
       return;
     }
-    changeCurrentBond(bond.token_name);
+    changeCurrentBond(bond.address);
   };
 
   return (
