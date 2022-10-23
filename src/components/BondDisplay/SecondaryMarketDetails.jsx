@@ -135,11 +135,10 @@ export default function SecondaryMarketDetails({
               )}
             </div>
             <div className="">
-              <div className="mt-6 flex items-center">
+              <div className="mt-6 flex gap-2 items-center flex-col md:flex-row">
                 <SecondaryButton
                   size="md"
                   colour="yellow"
-                  className="mr-2"
                   as="a"
                   href={market.liquidity_link}
                   target="_blank"
@@ -150,7 +149,10 @@ export default function SecondaryMarketDetails({
                 </SecondaryButton>
                 <SecondaryButton size="md" colour="yellow">
                   <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                  Request liquidity (coming soon)
+                  <span>
+                    Request liquidity{' '}
+                    <small className="whitespace-nowrap ">(coming soon)</small>
+                  </span>
                 </SecondaryButton>
               </div>
             </div>
