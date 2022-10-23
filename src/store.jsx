@@ -1,4 +1,10 @@
-import React, { useState, useContext, createContext, useEffect } from 'react';
+import React, {
+  useState,
+  useContext,
+  createContext,
+  useEffect,
+  useRef,
+} from 'react';
 
 const StoreContext = createContext(null);
 StoreContext.displayName = 'StoreContext';
@@ -9,7 +15,7 @@ export const ONE = 'one';
 
 export function useStoreTopLevel() {
   const [isLoading, setLoading] = useState(true);
-  const [isFetching, setFetching] = useState(false);
+  const isFetching = useRef(false);
   const [data, setData] = useState();
   const [currentBondId, setCurrentBond] = useState(undefined);
   const [shownBonds, setShownBonds] = useState(PARTIAL);
@@ -17,12 +23,13 @@ export function useStoreTopLevel() {
   const currentBond = currentBondId ? data.bonds[currentBondId] : undefined;
 
   const fetchDataFromServer = async () => {
-    if (isFetching) return;
-    setFetching(true);
+    if (isFetching.current) return;
+    isFetching.current = true;
+    console.log('fetchDataFromServer');
     const res = await fetch('https://ohmie-dashboard-backend.herokuapp.com/');
     const _data = await res.json();
     setData(_data);
-    setFetching(false);
+    isFetching.current = false;
   };
 
   const changeCurrentBond = (bondId) => {

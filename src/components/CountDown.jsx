@@ -2,10 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 
 const _1sec = 1000;
 
-export default function Countdown({ initialCount = 0, restart }) {
+export default function Countdown({
+  initialCount = 0,
+  restart,
+  onCountFinished,
+}) {
   const [isCounting, setIsCounting] = useState(true);
   const [count, setCount] = useState(initialCount); // in seconds
-  const [_restart, setRestart] = useState(); // in seconds
+  const [_restart, setRestart] = useState();
   const ref = useRef({ index: undefined });
 
   const reduceCounter = () => {
@@ -13,6 +17,7 @@ export default function Countdown({ initialCount = 0, restart }) {
       if (v <= 0) {
         setIsCounting(false);
         clearTimeout(ref.current.index);
+        setTimeout(onCountFinished, 50);
         return 0;
       }
       return v - 1;
@@ -33,7 +38,7 @@ export default function Countdown({ initialCount = 0, restart }) {
       clearTimeout(ref.current.index);
       setRestart(restart);
       reduceCounter();
-      console.log('restartChange', restart, initialCount, isCounting);
+      console.log('restart count', restart, initialCount, isCounting);
     }
   }, [restart, _restart, initialCount, isCounting]);
 

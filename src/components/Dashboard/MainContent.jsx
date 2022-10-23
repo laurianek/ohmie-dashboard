@@ -1,11 +1,14 @@
-import { useRef } from 'react';
 import Countdown from '../CountDown.jsx';
 import { MenuButton } from './Buttons.jsx';
 import { useStore } from '../../store.jsx';
 
 export default function Main({ children, openSidebar }) {
-  const restartRef = useRef({ id: '0000' });
-  const { isLoading } = useStore();
+  const { isLoading, fetchData, data } = useStore();
+
+  const fetchNewData = () => {
+    fetchData();
+    console.log('fetching new data');
+  };
 
   return (
     <div className="flex flex-1 flex-col md:pl-64">
@@ -16,7 +19,11 @@ export default function Main({ children, openSidebar }) {
         ) : (
           <div className="inline-flex items-center text-sm">
             <span className="hidden xs:inline-block pr-2">refreshing in</span>
-            <Countdown initialCount={30} restart={restartRef.current.id} />
+            <Countdown
+              initialCount={30}
+              restart={data?.block_number}
+              onCountFinished={fetchNewData}
+            />
           </div>
         )}
         <h1 className="text-2xl font-semibold absolute left-0 right-0 text-center top-2 sm:top-3 pointer-events-none">
@@ -32,7 +39,11 @@ export default function Main({ children, openSidebar }) {
             ) : (
               <div className="inline-flex items-center">
                 <span className="inline-block pr-2">refreshing in</span>
-                <Countdown initialCount={30} restart={restartRef.current.id} />
+                <Countdown
+                  initialCount={30}
+                  restart={data?.block_number}
+                  onCountFinished={fetchNewData}
+                />
               </div>
             )}
           </div>
