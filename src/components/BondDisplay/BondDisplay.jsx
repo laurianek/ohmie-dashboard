@@ -5,6 +5,7 @@ import { HeaderRow } from './Row.jsx';
 import Cell from './Cell.jsx';
 import MarketEmpty from './MarketEmpty.jsx';
 import MarketDetails from './MarketDetails.jsx';
+import SecondaryMarketDetails from './SecondaryMarketDetails.jsx';
 import { useStore } from '../../store.jsx';
 import { getFormatBondExpiry } from '../../util/index.js';
 
@@ -63,7 +64,7 @@ export default function BondDisplay() {
           </HeaderRow>
           {secondaryMarkets.length !== 0 &&
             secondaryMarkets.map((market, index) => (
-              <MarketDetails
+              <SecondaryMarketDetails
                 userStack={userStack}
                 market={market}
                 expiryTimestamp={
@@ -105,6 +106,7 @@ function getAllMarketType(type, data) {
         }))
       )
       .flat();
+
   return Object.values(data.bonds)
     .map(({ secondary_markets, expiry_timestamp }) =>
       secondary_markets.map((m) => ({

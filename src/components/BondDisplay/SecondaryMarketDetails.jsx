@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { Transition } from '@headlessui/react';
+import {
+  ArrowTrendingDownIcon,
+  ArrowTrendingUpIcon,
+  ChartBarIcon,
+} from '@heroicons/react/24/solid';
 import notificationOptions from './notificationOptions.js';
 import {
   calculate_bond_return,
   calculate_percent_return_bond_vs_staking,
-  classNames,
   getFormatIntervalFromNow,
   getIntervalFromNow,
   numberWithCommas,
@@ -16,7 +20,7 @@ import { FakeInput } from './FakeInput.jsx';
 import { PrimaryButton, SecondaryButton } from '../Buttons.jsx';
 import NotifyDropDown from './NotifyDropDown.jsx';
 
-export default function MarketDetails({
+export default function SecondaryMarketDetails({
   market,
   userStack,
   expiryTimestamp,
@@ -48,12 +52,6 @@ export default function MarketDetails({
         {market.price} {market.currency}
       </Cell>
       <Cell
-        label={'Discount'}
-        className={parseFloat(market.discount) < 0 ? 'text-red-500' : ''}
-      >
-        {parseFloat(market.discount).toFixed(2)} %
-      </Cell>
-      <Cell
         label={'Comp. staking'}
         className={comparisonPercent < 0 ? 'text-red-500' : 'text-lime-300'}
       >
@@ -61,23 +59,32 @@ export default function MarketDetails({
       </Cell>
       <Cell
         label={'You would get'}
-        className="flex justify-end flex-wrap gap-1.5 sm:col-span-2"
+        className="flex justify-end flex-wrap gap-1.5 sm:col-span-3"
       >
         <FakeInput currency={market.currency}>
           {numberWithCommas((bondReturn || 0).toFixed(4))}
         </FakeInput>
-        <SecondaryButton
-          className="min-w-[85px] min-h-[36px] my-0.5"
-          onClick={toggleSeeDetails(index)}
-        >
-          {!seeDetails[index] ? 'See details' : 'Hide details'}
-        </SecondaryButton>
         <PrimaryButton
           link={market.buy_link}
           className="min-w-[85px] min-h-[36px] my-0.5"
+          colour="green"
         >
           BUY
         </PrimaryButton>
+        <PrimaryButton
+          link={market.sell_link}
+          className="min-w-[85px] min-h-[36px] my-0.5"
+          colour="red"
+        >
+          SELL
+        </PrimaryButton>
+        <SecondaryButton
+          className="my-0.5"
+          colour="yellow"
+          onClick={toggleSeeDetails(index)}
+        >
+          <ChartBarIcon className="w-5 h-5" />
+        </SecondaryButton>
       </Cell>
 
       <Cell className="col-span-5 col-start-3">
@@ -91,25 +98,7 @@ export default function MarketDetails({
           leaveTo="opacity-0 -translate-y-10"
         >
           <div className="bg-lisbon-400 shadow rounded-lg px-4 py-5 sm:p-6 mt-3 text-black">
-            <div className="grid grid-cols-3 gap-4">
-              {getExtraStats(market, _1BondReturn, comparisonPercent).map(
-                ({ label, value, className = 'text-parisII-50' }, i) => (
-                  <div key={`${label}-${i}`} className="">
-                    <div className="mt-1 flex items-baseline justify-between md:block lg:flex">
-                      <div
-                        className={classNames(
-                          className,
-                          'flex items-baseline text-lg sm:text-xl font-semibold truncate'
-                        )}
-                      >
-                        {value}
-                      </div>
-                    </div>
-                    <div className="text-sm font-normal">{label}</div>
-                  </div>
-                )
-              )}
-            </div>
+            <div className="grid grid-cols-3 gap-4">{/*  more here*/}</div>
             <div className="mt-6 flex w-full gap-4 items-start sm:items-stretch">
               <PrimaryButton size="md" className="min-w-[120px]">
                 <div>

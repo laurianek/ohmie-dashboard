@@ -56,18 +56,32 @@ export function PrimaryButton({
   );
 }
 
-export function SecondaryButton({ onClick, children, className = '', size }) {
+export function SecondaryButton({
+  onClick,
+  children,
+  className = '',
+  size,
+  colour,
+}) {
   return (
     <button
       onClick={onClick}
       type="button"
       className={classNames(
-        'inline-flex justify-center text-center items-center border border-transparent bg-paris-50 px-2.5 py-1.5 font-medium text-paris-700 hover:bg-paris-200 focus:outline-none focus:ring-2 focus:ring-paris-500 focus:ring-offset-2',
+        'inline-flex justify-center text-center items-center border border-transparent px-2.5 py-1.5 font-medium focus:outline-none focus:ring-2 focus:ring-offset-2',
         size === 'lg'
           ? 'text-lg rounded-md'
           : size === 'md'
           ? 'text-base rounded-md'
           : 'text-xs rounded',
+        () => {
+          switch (colour) {
+            case 'yellow':
+              return 'bg-white text-parisII-700 hover:bg-parisII-200 focus:ring-parisII-500';
+            default:
+              return 'bg-white text-paris-700 hover:bg-paris-200 focus:ring-paris-500';
+          }
+        },
         className
       )}
     >
