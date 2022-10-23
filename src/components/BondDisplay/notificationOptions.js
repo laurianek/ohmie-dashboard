@@ -9,4 +9,11 @@ const notificationOptions = [
   },
 ];
 
+export const notificationOptions2 = [
+  {
+    type: 'SECONDARY_OPEN',
+    text: 'Notify me when liquidity has been added',
+  },
+];
+
 export default notificationOptions;

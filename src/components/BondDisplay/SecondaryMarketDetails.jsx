@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { Transition } from '@headlessui/react';
+import { ChartBarIcon, PlusIcon } from '@heroicons/react/24/solid';
 import {
-  ArrowTrendingDownIcon,
-  ArrowTrendingUpIcon,
-  ChartBarIcon,
-} from '@heroicons/react/24/solid';
-import notificationOptions from './notificationOptions.js';
+  ChartBarIcon as OChartBarIcon,
+  ArrowTopRightOnSquareIcon,
+  ArrowsRightLeftIcon,
+} from '@heroicons/react/24/outline';
+import { notificationOptions2 } from './notificationOptions.js';
 import {
   calculate_bond_return,
   calculate_percent_return_bond_vs_staking,
-  getFormatIntervalFromNow,
+  classNames,
   getIntervalFromNow,
   numberWithCommas,
 } from '../../util/index.js';
@@ -19,43 +20,55 @@ import Cell from './Cell.jsx';
 import { FakeInput } from './FakeInput.jsx';
 import { PrimaryButton, SecondaryButton } from '../Buttons.jsx';
 import NotifyDropDown from './NotifyDropDown.jsx';
+const display_notification = false;
 
 export default function SecondaryMarketDetails({
   market,
   userStack,
   expiryTimestamp,
-  index,
+  total_supply,
 }) {
-  const [seeDetails, setSeeDetails] = useState({});
-  const [options, setOptions] = useState(notificationOptions[0].text);
+  const [seeDetails, setSeeDetails] = useState(false);
+  const [options, setOptions] = useState(notificationOptions2[0].text);
 
-  const bondReturn = calculate_bond_return(userStack, market.price);
-  const _1BondReturn = calculate_bond_return(1, market.price);
+  const isMarketOpen = market.price !== -1;
+
+  const bondReturn =
+    isMarketOpen && calculate_bond_return(userStack, market.price);
   const dayDiff = getIntervalFromNow({
     timestamp: expiryTimestamp,
   });
-  const comparisonPercent = calculate_percent_return_bond_vs_staking(
-    userStack,
-    market.price,
-    dayDiff.days
-  );
-  const toggleSeeDetails = (key) => () =>
-    setSeeDetails((state) => ({ ...state, [key]: !state[key] }));
+
+  const comparisonPercent =
+    isMarketOpen &&
+    calculate_percent_return_bond_vs_staking(
+      userStack,
+      market.price,
+      dayDiff.days
+    );
+  const toggleSeeDetails = () => setSeeDetails((v) => !v);
 
   return (
-    <Row className={!seeDetails[index] ? 'sm:gap-y-0' : 'sm:gap-y-4'}>
+    <Row className={!seeDetails ? 'sm:gap-y-0' : 'sm:gap-y-4'}>
       <div className="font-medium sm:col-span-2 text-paris-500 text-xl sm:text-sm">
         {market.exchange.name} <br />
         {market._extra?.label}
       </div>
       <Cell label={'Price'}>
-        {market.price} {market.currency}
+        {isMarketOpen ? market.price : 'No ask on the market yet'}{' '}
+        {market.currency}
       </Cell>
       <Cell
         label={'Comp. staking'}
-        className={comparisonPercent < 0 ? 'text-red-500' : 'text-lime-300'}
+        className={
+          !isMarketOpen
+            ? 'text-lisbon-400'
+            : comparisonPercent < 0
+            ? 'text-red-500'
+            : 'text-lime-300'
+        }
       >
-        {comparisonPercent.toFixed(2)} %
+        {isMarketOpen ? comparisonPercent.toFixed(2) : '-'} %
       </Cell>
       <Cell
         label={'You would get'}
@@ -81,15 +94,19 @@ export default function SecondaryMarketDetails({
         <SecondaryButton
           className="my-0.5"
           colour="yellow"
-          onClick={toggleSeeDetails(index)}
+          onClick={toggleSeeDetails}
         >
-          <ChartBarIcon className="w-5 h-5" />
+          {seeDetails ? (
+            <OChartBarIcon className="w-5 h-5" />
+          ) : (
+            <ChartBarIcon className="w-5 h-5" />
+          )}
         </SecondaryButton>
       </Cell>
 
       <Cell className="col-span-5 col-start-3">
         <Transition
-          show={!!seeDetails[index]}
+          show={!!seeDetails}
           enter="transition duration-100"
           enterFrom="opacity-0 -translate-y-full"
           enterTo="opacity-100 translate-y-0"
@@ -98,17 +115,61 @@ export default function SecondaryMarketDetails({
           leaveTo="opacity-0 -translate-y-10"
         >
           <div className="bg-lisbon-400 shadow rounded-lg px-4 py-5 sm:p-6 mt-3 text-black">
-            <div className="grid grid-cols-3 gap-4">{/*  more here*/}</div>
-            <div className="mt-6 flex w-full gap-4 items-start sm:items-stretch">
-              <PrimaryButton size="md" className="min-w-[120px]">
-                <div>
-                  Notify me <br />
-                  <small>(coming soon)</small>
-                </div>
-              </PrimaryButton>
-
-              <NotifyDropDown value={options} onChange={(v) => setOptions(v)} />
+            <div className="grid grid-cols-2 gap-4">
+              {getExtraStats(market, total_supply).map(
+                ({ value, label, className = '' }, i) => (
+                  <div key={`${label}-${i}`} className="">
+                    <div className="mt-1 flex items-baseline justify-between md:block lg:flex">
+                      <div
+                        className={classNames(
+                          className,
+                          'flex items-baseline text-lg sm:text-xl font-semibold truncate'
+                        )}
+                      >
+                        {value}
+                      </div>
+                    </div>
+                    <div className="text-sm font-normal">{label}</div>
+                  </div>
+                )
+              )}
             </div>
+            <div className="">
+              <div className="mt-6 flex items-center">
+                <SecondaryButton
+                  size="md"
+                  colour="yellow"
+                  className="mr-2"
+                  as="a"
+                  href={market.liquidity_link}
+                  target="_blank"
+                >
+                  <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                  Add Liquidity{' '}
+                  <ArrowTopRightOnSquareIcon className="w-5 h-5 ml-2 -mr-1" />
+                </SecondaryButton>
+                <SecondaryButton size="md" colour="yellow">
+                  <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                  Request liquidity (coming soon)
+                </SecondaryButton>
+              </div>
+            </div>
+            {display_notification && (
+              <div className="mt-6 flex w-full gap-4 items-start sm:items-stretch">
+                <PrimaryButton size="md" className="min-w-[120px]">
+                  <div>
+                    Notify me <br />
+                    <small>(coming soon)</small>
+                  </div>
+                </PrimaryButton>
+
+                <NotifyDropDown
+                  value={options}
+                  onChange={(v) => setOptions(v)}
+                  options={notificationOptions2}
+                />
+              </div>
+            )}
           </div>
         </Transition>
       </Cell>
@@ -116,51 +177,22 @@ export default function SecondaryMarketDetails({
   );
 }
 
-function getExtraStats(market, userStack = 0, userPL = 0) {
-  const {
-    price,
-    currency,
-    remaining_available,
-    total_amount_available,
-    min_sale_price,
-    end_timestamp,
-    max_bondable_single_tx,
-  } = market;
-  const base = [
-    { label: 'Price', value: `${Number(price).toFixed(2)} ${currency}` },
+function getExtraStats(market, total_supply) {
+  const { currency, pairs } = market;
+  return [
     {
-      label: 'Back for every 1 OHM you put in',
-      value: `${numberWithCommas(userStack.toFixed(4))}`,
-      className: userStack < 1 ? 'text-red-700' : 'text-lime-300',
+      label: 'Total supply',
+      value: `${numberWithCommas(total_supply.toFixed(2))} ${currency}`,
     },
     {
-      label: 'Compared to staking',
-      value: `${numberWithCommas(userPL.toFixed(2))} %`,
-      className: userPL < 0 ? 'text-red-700' : 'text-lime-300',
+      label: 'Swap pairs',
+      value: (
+        <>
+          {pairs[0]}{' '}
+          <ArrowsRightLeftIcon className="w-5 h-5 shrink-0 relative top-0.5 mx-1" />{' '}
+          {pairs[1]}
+        </>
+      ),
     },
   ];
-
-  if (market.remaining_available) {
-    return base.concat([
-      {
-        label: 'Remaining available',
-        value: numberWithCommas(remaining_available),
-      },
-      {
-        label: 'Max bondable in one transaction',
-        value: numberWithCommas(max_bondable_single_tx),
-      },
-    ]);
-  }
-  return base.concat([
-    {
-      label: 'Total amount in auction',
-      value: numberWithCommas(total_amount_available),
-    },
-    { label: 'Min. sale price', value: numberWithCommas(min_sale_price) },
-    {
-      label: 'Gnosis option ending',
-      value: getFormatIntervalFromNow({ timestamp: end_timestamp }),
-    },
-  ]);
 }

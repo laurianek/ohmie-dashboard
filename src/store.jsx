@@ -23,13 +23,17 @@ export function useStoreTopLevel() {
   const currentBond = currentBondId ? data.bonds[currentBondId] : undefined;
 
   const fetchDataFromServer = async () => {
-    if (isFetching.current) return;
-    isFetching.current = true;
-    console.log('fetchDataFromServer');
-    const res = await fetch('https://ohmie-dashboard-backend.herokuapp.com/');
-    const _data = await res.json();
-    setData(_data);
-    isFetching.current = false;
+    try {
+      if (isFetching.current) return;
+      isFetching.current = true;
+      console.log('fetchDataFromServer');
+      const res = await fetch('https://ohmie-dashboard-backend.herokuapp.com/');
+      const _data = await res.json();
+      setData(_data);
+      isFetching.current = false;
+    } catch (e) {
+      // rollbar cannot fetch app
+    }
   };
 
   const changeCurrentBond = (bondId) => {

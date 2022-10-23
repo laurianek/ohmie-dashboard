@@ -56,17 +56,20 @@ export function PrimaryButton({
   );
 }
 
-export function SecondaryButton({
-  onClick,
-  children,
-  className = '',
-  size,
-  colour,
-}) {
+export function SecondaryButton(props) {
+  const {
+    children,
+    className = '',
+    size,
+    colour,
+    as = 'button',
+    ...rest
+  } = props;
+  let Tag = (props) => <button {...props}>{props.children}</button>;
+  if (as === 'a') Tag = (props) => <a {...props}>{props.children}</a>;
   return (
-    <button
-      onClick={onClick}
-      type="button"
+    <Tag
+      {...rest}
       className={classNames(
         'inline-flex justify-center text-center items-center border border-transparent px-2.5 py-1.5 font-medium focus:outline-none focus:ring-2 focus:ring-offset-2',
         size === 'lg'
@@ -86,6 +89,6 @@ export function SecondaryButton({
       )}
     >
       {children}
-    </button>
+    </Tag>
   );
 }

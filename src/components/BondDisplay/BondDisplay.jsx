@@ -50,7 +50,6 @@ export default function BondDisplay() {
                   currentBond?.expiry_timestamp || market.bond_expiry_timestamp
                 }
                 key={`live-market-${index}`}
-                index={index}
               />
             ))}
           {liveMarkets.length === 0 && (
@@ -67,12 +66,13 @@ export default function BondDisplay() {
               <SecondaryMarketDetails
                 userStack={userStack}
                 market={market}
+                total_supply={
+                  currentBond?.total_supply || market.bond_total_supply
+                }
                 expiryTimestamp={
                   currentBond?.expiry_timestamp || market.bond_expiry_timestamp
                 }
                 key={`live-market-${index}`}
-                index={index}
-                isSecondary
               />
             ))}
           {secondaryMarkets.length === 0 && (
@@ -108,10 +108,11 @@ function getAllMarketType(type, data) {
       .flat();
 
   return Object.values(data.bonds)
-    .map(({ secondary_markets, expiry_timestamp }) =>
+    .map(({ secondary_markets, expiry_timestamp, total_supply }) =>
       secondary_markets.map((m) => ({
         ...m,
         bond_expiry_timestamp: expiry_timestamp,
+        bond_total_supply: total_supply,
         _extra: {
           label:
             'Bond for ' + getFormatBondExpiry({ timestamp: expiry_timestamp }),
