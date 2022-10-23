@@ -14,6 +14,7 @@ function App() {
     getBondCardClassName,
     toggleShownBonds,
     data,
+    isLoading,
   } = useStore();
 
   return (
@@ -22,21 +23,25 @@ function App() {
         role="list"
         className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
       >
-        {Object.values(data.bonds).map((bond, index) => (
-          <BondCard
-            key={bond.token_name}
-            bond={bond}
-            className={getBondCardClassName(
-              index,
-              bond.token_name === currentBondId
-            )}
-          />
-        ))}
+        {!isLoading &&
+          Object.values(data?.bonds).map((bond, index) => (
+            <BondCard
+              key={bond.token_name}
+              bond={bond}
+              className={getBondCardClassName(
+                index,
+                bond.token_name === currentBondId
+              )}
+            />
+          ))}
+        {isLoading && [1, 2].map((i) => <BondCard key={i} />)}
       </ul>
       <div className="flex justify-end pt-2 pb-3">
-        <PlainButton onClick={toggleShownBonds}>
-          {shownBonds === ALL ? '[-] View less' : '[+] View all bonds'}
-        </PlainButton>
+        {!isLoading && (
+          <PlainButton onClick={toggleShownBonds}>
+            {shownBonds === ALL ? '[-] View less' : '[+] View all bonds'}
+          </PlainButton>
+        )}
       </div>
       <YourStake />
       <BondDisplay />

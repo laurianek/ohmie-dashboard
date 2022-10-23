@@ -9,6 +9,7 @@ export const ALL = 'all';
 export const ONE = 'one';
 
 export function useStoreTopLevel() {
+  const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState(initialData);
   const [currentBondId, setCurrentBond] = useState(undefined);
   const [shownBonds, setShownBonds] = useState(PARTIAL);
@@ -42,6 +43,7 @@ export function useStoreTopLevel() {
 
   return {
     data,
+    isLoading,
     currentBondId,
     currentBond,
     shownBonds,

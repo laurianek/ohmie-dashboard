@@ -10,7 +10,9 @@ import { useStore } from '../store.jsx';
 const shortTime = 500;
 
 export default function YourStake() {
-  const { userStack, setUserStack, currentBond } = useStore();
+  const { userStack, setUserStack, currentBond, isLoading } = useStore();
+  if (isLoading) return <Placeholder />;
+
   const [value, setValue] = useState(userStack);
   const timeoutRef = useRef({ index: undefined });
   const handleChange = (e) => setValue(e.target.value);
@@ -34,10 +36,7 @@ export default function YourStake() {
 
   return (
     <div className="sm:grid sm:grid-cols-3 lg:grid-cols-2 gap-4">
-      <div
-        key="here"
-        className="sm:col-span-2 sm:col-start-2 lg:col-span-1 lg:col-start-2"
-      >
+      <div className="sm:col-span-2 sm:col-start-2 lg:col-span-1 lg:col-start-2">
         <label htmlFor="price" className="block text-sm font-medium">
           Your stack to exchange
         </label>
@@ -70,6 +69,18 @@ export default function YourStake() {
             {numberWithCommas(rebases.toFixed(4))}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function Placeholder() {
+  return (
+    <div className="sm:grid sm:grid-cols-3 lg:grid-cols-2 gap-4 animate-pulse">
+      <div className="sm:col-span-2 sm:col-start-2 lg:col-span-1 lg:col-start-2">
+        <div className="bg-lisbon-300 h-4 rounded mt-2" />
+        <div className="bg-lisbon-300 h-4 rounded mt-2" />
+        <div className="bg-lisbon-300 h-4 rounded mt-2" />
       </div>
     </div>
   );

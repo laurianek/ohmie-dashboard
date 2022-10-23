@@ -4,9 +4,10 @@ import { OmegaIcon } from './Icons.jsx';
 import { useStore } from '../store.jsx';
 
 export default function BondCard({ bond, className }) {
-  const { changeCurrentBond, currentBondId } = useStore();
-  const isActive = currentBondId === bond.token_name;
+  const { changeCurrentBond, currentBondId, isLoading } = useStore();
+  if (isLoading) return <Placeholder />;
 
+  const isActive = currentBondId === bond.token_name;
   const toggleActiveBond = () => {
     if (isActive) {
       changeCurrentBond(undefined);
@@ -100,5 +101,22 @@ function PulsingDot() {
         className="w-[10px] h-[10px] bg-current rounded-full"
       />
     </div>
+  );
+}
+
+function Placeholder() {
+  return (
+    <li className="col-span-1 rounded-lg border border-4 border-lisbon-300 shadow box-border animate-pulse">
+      <div className="relative overflow-hidden px-4 pt-14 pb-12 shadow sm:px-6 rounded-lg">
+        <div className="absolute rounded-md p-3 text-lisbon-600 bg-lisbon-300 box-border">
+          <OmegaIcon size={'35px'} aria-hidden="true" />
+        </div>
+        <div className="absolute inset-x-0 top-0 px-4 py-4 sm:px-6">
+          <div className="bg-lisbon-300 h-4 rounded mt-2" />
+        </div>
+        <p className="ml-20 bg-lisbon-300 h-4 rounded" />
+        <p className="ml-20 bg-lisbon-300 h-4 rounded mt-4 " />
+      </div>
+    </li>
   );
 }

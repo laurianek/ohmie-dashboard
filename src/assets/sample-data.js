@@ -3,6 +3,7 @@ export default {
   bonds: {
     'OHM-20221103': {
       token_name: 'OHM-20221103',
+      address: '',
       display_name: 'Ohm Bonds',
       total_num_holders: 6,
       total_supply: 1625,
@@ -58,6 +59,7 @@ export default {
     },
     'OHM-20221104': {
       token_name: 'OHM-20221104',
+      address: '',
       display_name: 'Ohm Bonds',
       total_num_holders: 6,
       total_supply: 1625,
@@ -70,6 +72,7 @@ export default {
     },
     'OHM-20221112': {
       token_name: 'OHM-20221112',
+      address: '',
       display_name: 'Ohm Bonds',
       total_num_holders: 6,
       total_supply: 1625,
@@ -82,6 +85,7 @@ export default {
     },
     'OHM-20221120': {
       token_name: 'OHM-20221120',
+      address: '',
       display_name: 'Ohm Bonds',
       total_num_holders: 6,
       total_supply: 1625,

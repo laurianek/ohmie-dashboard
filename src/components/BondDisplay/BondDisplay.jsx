@@ -9,7 +9,9 @@ import { useStore } from '../../store.jsx';
 import { getFormatBondExpiry } from '../../util/index.js';
 
 export default function BondDisplay() {
-  const { userStack, currentBond, data } = useStore();
+  const { userStack, currentBond, data, isLoading } = useStore();
+  if (isLoading) return <Placeholder />;
+
   const subTitle = currentBond
     ? getFormatBondExpiry({ timestamp: currentBond.expiry_timestamp })
     : '';
@@ -115,4 +117,30 @@ function getAllMarketType(type, data) {
       }))
     )
     .flat();
+}
+
+function Placeholder() {
+  return (
+    <div className="py-12 animate-pulse">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mt-10">
+          <dl className="space-y-10 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10 md:space-y-0">
+            {[1, 2, 3, 4].map((feature) => (
+              <div key={feature} className="relative">
+                <dt>
+                  <div className="absolute flex h-12 w-12 items-center justify-center rounded-md bg-lisbon-300" />
+                  <p className="ml-16 text-lg font-medium leading-6 bg-lisbon-300 w-24 h-4 rounded" />
+                </dt>
+                <dd className="mt-2 ml-16 text-base">
+                  <div className="bg-lisbon-300 h-4 rounded mt-2" />
+                  <div className="bg-lisbon-300 h-4 rounded mt-2" />
+                  <div className="bg-lisbon-300 h-4 rounded mt-2" />
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </div>
+  );
 }
