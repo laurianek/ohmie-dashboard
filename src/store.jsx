@@ -9,6 +9,7 @@ export const ONE = 'one';
 
 export function useStoreTopLevel() {
   const [isLoading, setLoading] = useState(true);
+  const [isFetching, setFetching] = useState(false);
   const [data, setData] = useState();
   const [currentBondId, setCurrentBond] = useState(undefined);
   const [shownBonds, setShownBonds] = useState(PARTIAL);
@@ -16,9 +17,12 @@ export function useStoreTopLevel() {
   const currentBond = currentBondId ? data.bonds[currentBondId] : undefined;
 
   const fetchDataFromServer = async () => {
+    if (isFetching) return;
+    setFetching(true);
     const res = await fetch('https://ohmie-dashboard-backend.herokuapp.com/');
     const _data = await res.json();
     setData(_data);
+    setFetching(false);
   };
 
   const changeCurrentBond = (bondId) => {
@@ -69,6 +73,7 @@ export function useStoreTopLevel() {
     toggleShownBonds,
     setUserStack,
     setData,
+    fetchData: fetchDataFromServer,
   };
 }
 

@@ -5,7 +5,7 @@ export default function Footer() {
   const navigation = [
     {
       name: 'GitHub',
-      href: '#',
+      href: 'https://github.com/laurianek/ohmie-dashboard',
       icon: GitHubIcon,
     },
   ];
@@ -18,6 +18,7 @@ export default function Footer() {
             <a
               key={item.name}
               href={item.href}
+              target="_blank"
               className="text-lisbon-400 hover:text-lisbon-500"
             >
               <span className="sr-only">{item.name}</span>

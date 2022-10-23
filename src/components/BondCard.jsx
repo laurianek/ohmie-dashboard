@@ -7,7 +7,8 @@ export default function BondCard({ bond, className }) {
   const { changeCurrentBond, currentBondId, isLoading } = useStore();
   if (isLoading) return <Placeholder />;
 
-  const isActive = currentBondId === bond.token_name;
+  const isActive = currentBondId === bond.address;
+  const isRedeemable = bond.expiry_timestamp * 1000 < Date.now();
   const toggleActiveBond = () => {
     if (isActive) {
       changeCurrentBond(undefined);
@@ -15,6 +16,10 @@ export default function BondCard({ bond, className }) {
     }
     changeCurrentBond(bond.address);
   };
+
+  const bondPrice = bond.best_price
+    ? Number(bond.best_price).toFixed(2)
+    : 'Not priced';
 
   return (
     <li
@@ -30,6 +35,8 @@ export default function BondCard({ bond, className }) {
             className={classNames(
               isActive
                 ? 'bg-parisII-400'
+                : isRedeemable
+                ? 'bg-lisbon-400 group-hover:bg-lisbon-300'
                 : 'bg-paris-500 group-hover:bg-paris-400',
               'absolute rounded-md p-3 text-white'
             )}
@@ -46,16 +53,16 @@ export default function BondCard({ bond, className }) {
               className={classNames(
                 isActive
                   ? 'text-parisII-500 group-hover:text-parisII-400'
+                  : isRedeemable
+                  ? 'text-lisbon-400 group-hover:text-lisbon-300'
                   : 'text-paris-500 group-hover:text-paris-400',
-                'text-lg font-medium'
+                'text-lg font-medium truncate'
               )}
             >
-              {bond.display_name}
+              {bond.display_full_name}
             </div>
           </div>
-          <p className="text-2xl font-semibold text-lisbon-100">
-            {Number(bond.best_price).toFixed(2)}
-          </p>
+          <p className="text-2xl font-semibold text-lisbon-100">{bondPrice}</p>
           <p className="ml-1 flex items-baseline text-lisbon-100 text-sm font-semibold">
             {bond.currency}
           </p>
@@ -65,8 +72,10 @@ export default function BondCard({ bond, className }) {
                 href="#"
                 className={classNames(
                   isActive
-                    ? 'text-parisII-100 hover:text-parisII-50'
-                    : 'text-paris-200 hover:text-paris-100',
+                    ? 'text-parisII-100 group-hover:text-parisII-50'
+                    : isRedeemable
+                    ? 'text-lisbon-200 group-hover:text-lisbon-100'
+                    : 'text-paris-200 group-hover:text-paris-100',
                   'font-medium'
                 )}
               >
@@ -75,7 +84,11 @@ export default function BondCard({ bond, className }) {
             </div>
             <div
               className={classNames(
-                isActive ? 'text-parisII-100' : 'text-paris-200',
+                isActive
+                  ? 'text-parisII-100'
+                  : isRedeemable
+                  ? 'text-lisbon-200'
+                  : 'text-paris-200',
                 'font-medium w-1/2 flex items-center justify-end'
               )}
             >
@@ -84,6 +97,11 @@ export default function BondCard({ bond, className }) {
             </div>
           </div>
         </dd>
+        {isRedeemable && (
+          <div className="bg-lime-500 absolute right-[1px] top-[1px] text-sm text-lisbon-800 px-2 py-1 rounded-sm box-border rounded-tr-lg">
+            Redeemable
+          </div>
+        )}
       </div>
     </li>
   );

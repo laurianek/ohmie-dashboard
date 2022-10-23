@@ -13,6 +13,9 @@ export default function YourStake() {
   const { userStack, setUserStack, currentBond, isLoading } = useStore();
   const [value, setValue] = useState(userStack);
   const timeoutRef = useRef({ index: undefined });
+  const isRedeemable = currentBond
+    ? currentBond.expiry_timestamp * 1000 < Date.now()
+    : false;
 
   useEffect(() => {
     if (userStack !== value) {
@@ -26,11 +29,12 @@ export default function YourStake() {
 
   const handleChange = (e) => setValue(e.target.value);
 
-  const dayDiff = currentBond
-    ? getIntervalFromNow({
-        timestamp: currentBond.expiry_timestamp,
-      })
-    : { days: 20 };
+  const dayDiff =
+    currentBond && !isRedeemable
+      ? getIntervalFromNow({
+          timestamp: currentBond.expiry_timestamp,
+        })
+      : { days: 20 };
   const rebases = calculate_rebase_for_x_days(userStack, dayDiff.days);
 
   if (isLoading) return <Placeholder />;
@@ -56,11 +60,19 @@ export default function YourStake() {
           />
         </div>
         <div className="block text-sm font-medium mt-5">
-          {currentBond
-            ? `~ What you would get ${getFormatIntervalFromNow({
-                timestamp: currentBond.expiry_timestamp,
-              })} if you keep staking`
-            : `~ What you would get if you keep staking for ${dayDiff.days} days`}
+          {currentBond && !isRedeemable ? (
+            <>
+              ~ What you would get{' '}
+              <span className="font-bold underline">
+                {getFormatIntervalFromNow({
+                  timestamp: currentBond.expiry_timestamp,
+                })}
+              </span>{' '}
+              if you keep staking
+            </>
+          ) : (
+            `~ What you would get if you keep staking for ${dayDiff.days} days`
+          )}
         </div>
         <div className="relative mt-1 rounded-md shadow-sm">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
