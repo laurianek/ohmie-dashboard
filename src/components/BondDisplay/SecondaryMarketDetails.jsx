@@ -81,6 +81,7 @@ export default function SecondaryMarketDetails({
           link={market.buy_link}
           className="min-w-[85px] min-h-[36px] my-0.5"
           colour="green"
+          disabled={market.buy_link.length < 3}
         >
           BUY
         </PrimaryButton>
@@ -88,6 +89,7 @@ export default function SecondaryMarketDetails({
           link={market.sell_link}
           className="min-w-[85px] min-h-[36px] my-0.5"
           colour="red"
+          disabled={market.sell_link.length < 3}
         >
           SELL
         </PrimaryButton>

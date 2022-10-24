@@ -26,13 +26,15 @@ export function PrimaryButton({
   className = '',
   size,
   colour,
+  ...rest
 }) {
   return (
     <button
+      {...rest}
       onClick={onClick}
       type="button"
       className={classNames(
-        'inline-flex justify-center text-center items-center border border-transparent px-2.5 py-1.5 font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2',
+        'inline-flex justify-center text-center items-center border border-transparent px-2.5 py-1.5 font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-75',
         size === 'lg'
           ? 'text-lg rounded-md'
           : size === 'md'
@@ -41,9 +43,9 @@ export function PrimaryButton({
         () => {
           switch (colour) {
             case 'green':
-              return 'bg-lime-600 hover:bg-lime-700 focus:ring-lime-500';
+              return 'bg-lime-600 hover:bg-lime-700 focus:ring-lime-500 disabled:bg-lime-600';
             case 'red':
-              return 'bg-red-600 hover:bg-red-700 focus:ring-red-500';
+              return 'bg-red-600 hover:bg-red-700 focus:ring-red-500 disabled:bg-red-600';
             default:
               return 'bg-paris-600 hover:bg-paris-700 focus:ring-paris-500';
           }
