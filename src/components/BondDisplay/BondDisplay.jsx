@@ -61,6 +61,9 @@ export default function BondDisplay() {
             <Cell>Compare to staking</Cell>
             <Cell className="sm:col-span-3">You would get</Cell>
           </HeaderRow>
+          <h4 className="sm:hidden bg-lisbon-700 py-2 text-lg text-center">
+            Secondary markets
+          </h4>
           {secondaryMarkets.length !== 0 &&
             secondaryMarkets.map((market, index) => (
               <SecondaryMarketDetails

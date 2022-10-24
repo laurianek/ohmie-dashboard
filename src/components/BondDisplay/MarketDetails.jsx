@@ -45,7 +45,7 @@ export default function MarketDetails({
         {market._extra?.label}
       </div>
       <Cell label={'Price'}>
-        {market.price} {market.currency}
+        {market.price.toFixed(4)} {market.currency}
       </Cell>
       <Cell
         label={'Discount'}
@@ -138,7 +138,7 @@ function getExtraStats(market, userStack = 0, userPL = 0) {
     max_bondable_single_tx,
   } = market;
   const base = [
-    { label: 'Price', value: `${Number(price).toFixed(2)} ${currency}` },
+    { label: 'Price', value: `${Number(price).toFixed(4)} ${currency}` },
     {
       label: 'Back for every 1 OHM you put in',
       value: `${numberWithCommas(userStack.toFixed(4))}`,

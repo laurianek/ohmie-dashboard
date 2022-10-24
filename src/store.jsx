@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
+import { simulator } from './util/simulator.js';
 
 const StoreContext = createContext(null);
 StoreContext.displayName = 'StoreContext';
@@ -29,6 +30,7 @@ export function useStoreTopLevel() {
       console.log('fetchDataFromServer');
       const res = await fetch('https://ohmie-dashboard-backend.herokuapp.com/');
       const _data = await res.json();
+      simulator(_data);
       setData(_data);
       isFetching.current = false;
     } catch (e) {
